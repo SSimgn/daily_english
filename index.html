@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#2563eb" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Daily 30 English" />
+  <title>Daily 30 English - 30분 영어 습관 & 연음 훈련</title>
+
+  <!-- Google Font & Tailwind CSS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- PWA Dynamic Web App Manifest Injection -->
+  <script>
+    const manifestJson = {
+      name: "Daily 30 English",
+      short_name: "Daily30",
+      description: "하루 30분 직장인 실전 영어 다이얼로그 & 연음 트레이닝",
+      start_url: "./index.html",
+      display: "standalone",
+      background_color: "#0f172a",
+      theme_color: "#2563eb",
+      icons: [
+        {
+          src: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' fill='%232563eb'><rect width='512' height='512' rx='120' fill='%232563eb'/><text x='50%' y='58%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='260' font-weight='bold' fill='white'>30</text></svg>",
+          sizes: "512x512",
+          type: "image/svg+xml",
+          purpose: "any maskable"
+        }
+      ]
+    };
+    const blob = new Blob([JSON.stringify(manifestJson)], { type: 'application/json' });
+    const manifestURL = URL.createObjectURL(blob);
+    const linkTag = document.createElement('link');
+    linkTag.rel = 'manifest';
+    linkTag.href = manifestURL;
+    document.head.appendChild(linkTag);
+  </script>
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    .safe-top {
+      padding-top: env(safe-area-inset-top, 16px);
+    }
+    .safe-bottom {
+      padding-bottom: env(safe-area-inset-bottom, 20px);
+    }
+    .line-playing {
+      border-color: #3b82f6 !important;
+      background-color: rgba(59, 130, 246, 0.12) !important;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.35);
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-100 antialiased min-h-screen flex flex-col justify-between selection:bg-blue-500 selection:text-white">
+
+  <header class="safe-top bg-slate-900/95 backdrop-blur-md sticky top-0 z-30 border-b border-slate-800 px-4 pt-4 pb-3">
+    <div class="max-w-md mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-2.5">
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-indigo-400 flex items-center justify-center font-extrabold text-white text-base shadow-lg shadow-blue-500/25">
+          30
+        </div>
+        <div>
+          <h1 class="text-base font-bold tracking-tight text-white flex items-center gap-1.5">
+            Daily English
+            <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30">PWA</span>
+          </h1>
+          <p class="text-xs text-slate-400">30분 다이얼로그 & 연음(발음) 훈련</p>
+        </div>
+      </div>
+
+      <!-- Streak Badge -->
+      <div class="flex items-center gap-2">
+        <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800/90 border border-slate-700/80 text-xs font-semibold text-amber-400 shadow-sm">
+          <svg class="w-4 h-4 fill-current text-amber-400" viewBox="0 0 24 24">
+            <path d="M12.9 2.1c.3.5.3 1.1 0 1.6-1.4 2.2-1.9 3.8-1.9 5.3 0 1.9 1.1 3.5 2.7 4.3.4.2.7.6.7 1 0 .7-.6 1.3-1.3 1.3-.2 0-.4 0-.6-.1-2.4-1-3.9-3.4-3.9-6 0-1.7.6-3.7 1.8-5.7.5-.8 1.7-1.3 2.5-.4zm4.6 6.3c.3.5.2 1.1-.2 1.5-1.9 1.9-2.7 3.5-2.7 5.1 0 2.2 1.4 4.1 3.4 4.8.4.1.7.5.7.9 0 .6-.5 1.1-1.1 1.1-.3 0-.6-.1-.8-.2-2.8-1.1-4.7-3.8-4.7-6.9 0-2.1 1-4.2 2.9-6.5.6-.7 1.7-.6 2.5.2z"/>
+          </svg>
+          <span id="streakDisplay">0일 연속</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lesson Navigation Pills -->
+    <div class="max-w-md mx-auto mt-3.5 flex gap-2 overflow-x-auto no-scrollbar pb-1" id="dayPillsContainer">
+      <!-- Injected via JavaScript -->
+    </div>
+  </header>
+
+  <main class="max-w-md mx-auto w-full px-4 pt-4 pb-28 flex-1">
+    
+    <!-- Lesson Banner & Toggle Hub -->
+    <div class="bg-gradient-to-br from-slate-800/95 via-slate-800/70 to-slate-900 border border-slate-700/70 rounded-3xl p-4.5 mb-4 shadow-sm relative overflow-hidden">
+      <div class="flex items-start justify-between gap-2">
+        <div>
+          <span id="lessonBadge" class="text-xs font-bold text-blue-400 uppercase tracking-wider">Day 1 • Morning Small Talk</span>
+          <h2 id="lessonTitle" class="text-lg font-bold text-white mt-1 leading-snug">Need My Morning Caffeine Fix</h2>
+          <p id="lessonSubtitle" class="text-xs text-slate-400 mt-0.5">출근 직후 탕비실에서 동료와 가볍게 나누는 대화</p>
+        </div>
+        <button id="completeBtn" onclick="toggleLessonCompletion()" class="shrink-0 p-2.5 rounded-2xl border transition-all text-xs font-semibold flex items-center gap-1.5 bg-slate-800/80 border-slate-700 text-slate-300 active:scale-95 shadow-sm">
+          <svg id="completeCheckIcon" class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+          </svg>
+          <span id="completeBtnText">오늘 공부 완료</span>
+        </button>
+      </div>
+
+      <!-- Quick Toggles Toolbar -->
+      <div class="mt-4 pt-3.5 border-t border-slate-700/60 flex items-center justify-between text-xs">
+        <div class="flex items-center gap-3">
+          <label class="flex items-center gap-1.5 cursor-pointer text-slate-300 hover:text-white transition-colors">
+            <input type="checkbox" id="toggleTrans" checked onchange="toggleViewSettings()" class="rounded bg-slate-700 border-slate-600 text-blue-600 focus:ring-0 w-3.5 h-3.5" />
+            <span class="font-medium">해석 보기</span>
+          </label>
+          <label class="flex items-center gap-1.5 cursor-pointer text-slate-300 hover:text-white transition-colors">
+            <input type="checkbox" id="togglePronunciation" checked onchange="toggleViewSettings()" class="rounded bg-slate-700 border-slate-600 text-blue-600 focus:ring-0 w-3.5 h-3.5" />
+            <span class="font-medium">발음 & 연음 팁</span>
+          </label>
+        </div>
+
+        <button onclick="autoplayDialogue()" id="autoplayBtn" class="flex items-center gap-1.5 bg-blue-600/20 border border-blue-500/30 hover:bg-blue-600/30 text-blue-300 font-semibold px-2.5 py-1.5 rounded-xl transition-all active:scale-95">
+          <svg id="autoplayIcon" class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+            <path d="M8 5v14l11-7z"/>
+          </svg>
+          <span id="autoplayText">전체 연속 듣기</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="grid grid-cols-3 gap-1 bg-slate-800/80 p-1 rounded-2xl border border-slate-700/70 mb-4">
+      <button onclick="switchTab('dialogue')" id="tabBtn-dialogue" class="tab-btn py-2 text-xs font-bold rounded-xl transition-all text-white bg-blue-600 shadow-sm">
+        다이얼로그 (6)
+      </button>
+      <button onclick="switchTab('expressions')" id="tabBtn-expressions" class="tab-btn py-2 text-xs font-bold rounded-xl transition-all text-slate-400 hover:text-slate-200">
+        핵심 표현
+      </button>
+      <button onclick="switchTab('quiz')" id="tabBtn-quiz" class="tab-btn py-2 text-xs font-bold rounded-xl transition-all text-slate-400 hover:text-slate-200">
+        빈칸 퀴즈 (3)
+      </button>
+    </div>
+
+    <!-- Tab 1: Dialogue List with Linked Speech Tips -->
+    <section id="tab-dialogue" class="space-y-3.5">
+      <div id="dialogueList" class="space-y-3.5">
+        <!-- Lines injected via JS -->
+      </div>
+      <div class="mt-4 p-3.5 rounded-2xl bg-indigo-950/30 border border-indigo-900/40 text-xs text-indigo-300 flex items-start gap-2.5">
+        <svg class="w-4.5 h-4.5 shrink-0 text-indigo-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        <span class="leading-relaxed"><strong>연음 훈련 팁:</strong> 단어를 한 단어씩 딱딱 끊지 말고, 주황색 연음 가이드처럼 <strong>한 단어의 음절인 것처럼 호흡을 이어서</strong> 소리 내어 보세요.</span>
+      </div>
+    </section>
+
+    <!-- Tab 2: Key Expressions -->
+    <section id="tab-expressions" class="space-y-3 hidden">
+      <div id="expressionsList" class="space-y-3">
+        <!-- Expressions injected via JS -->
+      </div>
+    </section>
+
+    <!-- Tab 3: Interactive Quiz -->
+    <section id="tab-quiz" class="space-y-4 hidden">
+      <div class="p-3.5 rounded-2xl bg-slate-800/50 border border-slate-700/60 flex items-center justify-between">
+        <div>
+          <h3 class="text-sm font-bold text-white">오늘 배운 표현 복습</h3>
+          <p class="text-xs text-slate-400">상황 맥락에 맞는 핵심 표현을 맞춰보세요.</p>
+        </div>
+        <button onclick="resetQuiz()" class="text-xs text-blue-400 hover:text-blue-300 underline font-medium">초기화</button>
+      </div>
+      <div id="quizList" class="space-y-3.5">
+        <!-- Quiz questions injected via JS -->
+      </div>
+    </section>
+  </main>
+
+  <footer class="safe-bottom fixed bottom-0 left-0 right-0 z-20 bg-slate-900/95 backdrop-blur-md border-t border-slate-800/80 px-4 py-2.5">
+    <div class="max-w-md mx-auto flex items-center justify-between text-xs text-slate-400">
+      <div class="flex items-center gap-2">
+        <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span>모바일 브라우저 PWA 지원</span>
+      </div>
+      <button onclick="showPwaGuideModal()" class="text-xs text-blue-400 font-semibold hover:underline flex items-center gap-1">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+        </svg>
+        홈 화면 추가 방법
+      </button>
+    </div>
+  </footer>
+
+  <div id="pwaModal" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-4">
+    <div class="bg-slate-800 border border-slate-700 w-full max-w-sm rounded-3xl p-5 text-slate-200 shadow-2xl">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-700">
+        <h3 class="text-base font-bold text-white">홈 화면에 추가하여 앱처럼 쓰기</h3>
+        <button onclick="closePwaGuideModal()" class="text-slate-400 hover:text-white p-1">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+      <div class="mt-4 space-y-3 text-xs text-slate-300 leading-relaxed">
+        <div class="flex gap-3">
+          <span class="w-5 h-5 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center shrink-0">1</span>
+          <p><strong>아이폰 (Safari)</strong>: 브라우저 하단 <strong>공유 아이콘 (네모 위 화살표)</strong> ➜ <strong>'홈 화면에 추가'</strong></p>
+        </div>
+        <div class="flex gap-3">
+          <span class="w-5 h-5 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center shrink-0">2</span>
+          <p><strong>갤럭시 (Chrome)</strong>: 우측 상단 <strong>점 3개 메뉴</strong> ➜ <strong>'홈 화면에 추가'</strong> 또는 <strong>'앱 설치'</strong></p>
+        </div>
+        <div class="p-3 bg-slate-900/60 rounded-2xl text-slate-400 text-[11px] leading-relaxed">
+          💡 설치 후 누르면 웹 브라우저 주소창 없이 진짜 앱 화면으로 열려 매일 쾌적하게 학습할 수 있습니다.
+        </div>
+      </div>
+      <button onclick="closePwaGuideModal()" class="w-full mt-4 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-white text-xs">
+        확인했습니다
+      </button>
+    </div>
+  </div>
+
+  <script>
+    const LESSONS = [
+      {
+        id: "day1",
+        dayNum: "Day 1",
+        category: "Morning Small Talk",
+        title: "Need My Morning Caffeine Fix",
+        subtitle: "출근 직후 탕비실에서 동료와 가볍게 나누는 대화",
+        dialogues: [
+          {
+            speaker: "A",
+            name: "Alex",
+            text: "Morning! You look a bit exhausted today. Did you get much sleep?",
+            ipa: "[ˈmɔːrnɪŋ! juː lʊk ə bɪt ɪɡˈzɔːstɪd təˈdeɪ. dɪd juː ɡet mʌtʃ sliːp?]",
+            linking: "look a bit은 자음과 모음이 붙어 [루-커-빗], Did you get은 d와 y가 만나 [디-쥬-겟]으로 부드럽게 이어집니다.",
+            trans: "좋은 아침! 오늘 좀 피곤해 보이는데, 잠은 좀 푹 잤어요?"
+          },
+          {
+            speaker: "B",
+            name: "Sam",
+            text: "Not really. I was up late wrapping up some personal stuff.",
+            ipa: "[nɑːt ˈriːəli. aɪ wəz ʌp leɪt ˈræpɪŋ ʌp səm ˈpɜːrsənl stʌf]",
+            linking: "was up은 [워-접], wrapping up은 p 받침이 넘어가 [래핑-업]으로 하나의 단어처럼 소리 납니다.",
+            trans: "별로요. 개인적인 일 좀 마무리하느라 늦게까지 깨어 있었어요."
+          },
+          {
+            speaker: "A",
+            name: "Alex",
+            text: "I hear you. I'm definitely going to need a second cup of coffee to get through the day.",
+            ipa: "[aɪ hɪr juː. aɪm ˈdefɪnətli ˈɡoʊɪŋ tuː niːd ə ˈsekənd kʌp əv ˈkɔːfi tuː ɡet θruː ðə deɪ]",
+            linking: "cup of coffee는 [커-퍼-커피]처럼 of의 f가 약화되어 빠르게 스치듯 연음됩니다.",
+            trans: "무슨 말인지 알죠. 저도 오늘 하루 버티려면 커피 두 잔은 마셔야겠어요."
+          },
+          {
+            speaker: "B",
+            name: "Sam",
+            text: "Same here. My brain hasn't fully kicked in yet.",
+            ipa: "[seɪm hɪr. maɪ breɪn ˈhæznt ˈfʊli kɪkt ɪn jet]",
+            linking: "kicked in의 ed([t])와 in이 연음되어 [킥-틴]으로 강하게 붙여 발음합니다.",
+            trans: "저도 마찬가지예요. 아직 뇌가 제대로 깨어나지도 않았어요."
+          },
+          {
+            speaker: "A",
+            name: "Alex",
+            text: "Well, hang in there! We've got that team catch-up before lunch.",
+            ipa: "[wel, hæŋ ɪn ðer! wiːv ɡɑːt ðæt tiːm ˈkætʃ ʌp bɪˈfɔːr lʌntʃ]",
+            linking: "hang in there는 [행-인-데어]를 한 호흡으로 뱉고, catch-up은 ch와 u가 붙어 [캐-첩]으로 소리 납니다.",
+            trans: "그래도 힘내봐요! 점심 전에 팀 회의(캐치업) 있잖아요."
+          },
+          {
+            speaker: "B",
+            name: "Sam",
+            text: "Right, I'd better pull myself together. Let's make it through today.",
+            ipa: "[raɪt, aɪd ˈbetər pʊl maɪˈself təˈɡeðər. lets meɪk ɪt θruː təˈdeɪ]",
+            linking: "I'd better는 [아이-베러], make it through는 k가 it으로 넘어가 [메이-킷-쓰루]로 연음됩니다.",
+            trans: "맞다, 정신 좀 바짝 차려야겠네요. 오늘 하루도 잘 버텨봅시다."
+          }
+        ],
+        expressions: [
+          {
+            phrase: "wrap up ~",
+            meaning: "(일, 미팅, 작업 등을) 잘 마무리 짓다",
+            example: "Let's wrap up this meeting before noon."
+          },
+          {
+            phrase: "I hear you.",
+            meaning: "(완전 공감) 그 마음 알지, 무슨 말인지 이해해",
+            example: "I hear you, it has been an exhausting week."
+          },
+          {
+            phrase: "kick in",
+            meaning: "(카페인, 약효 등이) 돌기 시작하다, 효과를 내다",
+            example: "The painkiller should kick in about 20 minutes from now."
+          },
+          {
+            phrase: "pull oneself together",
+            meaning: "정신을 차리다, 마음을 가다듬다",
+            example: "Take a deep breath and pull yourself together."
+          }
+        ],
+        quizzes: [
+          {
+            question: "동료의 힘든 사정에 '완전 공감해, 그 마음 알지'라고 맞장구칠 때:",
+            prompt: "____ ____ ____. I feel the exact same way.",
+            answers: ["I hear you", "i hear you"],
+            hint: "hear(듣다)가 들어가는 3단어"
+          },
+          {
+            question: "커피나 피로회복제 효과가 '아직 돌지 않았다'고 표현할 때:",
+            prompt: "My morning coffee hasn't fully ____ ____ yet.",
+            answers: ["kicked in", "kick in"],
+            hint: "kick + 전치사"
+          },
+          {
+            question: "나태해지거나 당황했을 때 '정신 바짝 차리자'고 다짐할 때:",
+            prompt: "I need to take a deep breath and ____ ____ ____.",
+            answers: ["pull myself together", "pull yourself together"],
+            hint: "pull + myself + together"
+          }
+        ]
+      },
+      {
+        id: "day2",
+        dayNum: "Day 2",
+        category: "Evening & Weekend Plans",
+        title: "Calling It a Day",
+        subtitle: "퇴근길 엘리베이터 앞에서 가볍게 주말 계획을 나눌 때",
+        dialogues: [
+          {
+            speaker: "A",
+            name: "Alex",
+            text: "Are you calling it a day already?",
+            ipa: "[ɑːr juː ˈkɔːlɪŋ ɪt ə deɪ ɔːlˈredi]",
+            linking: "calling it a는 끊김 없이 [콜링-이-러]로 부드럽게 세 단어가 하나로 이어집니다.",
+            trans: "벌써 퇴근하시는 거예요?"
+          },
+          {
+            speaker: "B",
+            name: "Sam",
+            text: "Yeah, I've got a busy weekend ahead, so I'm trying to beat the traffic.",
+            ipa: "[jeə, aɪv ɡɑːt ə ˈbɪzi ˈwiːkend əˈhed, soʊ aɪm ˈtraɪɪŋ tuː biːt ðə ˈtræfɪk]",
+            linking: "I've got a는 [아이브 가러], traffic의 tr은 혀가 닿으며 [츄래픽]에 가깝게 발음됩니다.",
+            trans: "네, 이번 주말에 일정이 빡빡해서 차 막히기 전에 가보려고요."
+          },
+          {
+            speaker: "A",
+            name: "Alex",
+            text: "Nice. Any big plans for the weekend?",
+            ipa: "[naɪs. ˈeni bɪɡ plænz fər ðə ˈwiːkend]",
+            linking: "for the는 아주 약하게 [퍼-더]로 휙 지나가고 weekend에 힘을 줍니다.",
+            trans: "좋네요. 주말에 뭐 특별한 계획 있으세요?"
+          },
+          {
+            speaker: "B",
+            name: "Sam",
+            text: "Nothing special, just catching up on some sleep and running a few errands. How about you?",
+            ipa: "[ˈnʌθɪŋ ˈspeʃl, dʒʌst ˈkætʃɪŋ ʌp ɑːn səm sliːp ənd ˈrʌnɪŋ ə fjuː ˈerəndz. haʊ əˈbaʊt juː]",
+            linking: "catching up on은 [캐칭-어-판]으로 연음되고, errands는 [에-런즈]로 가볍게 발음합니다.",
+            trans: "특별한 건 없고, 밀린 잠 좀 자고 볼일 몇 개 보려고요. 그쪽은요?"
+          },
+          {
+            speaker: "A",
+            name: "Alex",
+            text: "I'm just planning to kick back and binge-watch a new series.",
+            ipa: "[aɪm dʒʌst ˈplænɪŋ tuː kɪk bæk ənd ˈbɪndʒ wɑːtʃ ə nuː ˈsɪriːz]",
+            linking: "kick back은 첫 k에서 숨을 살짝 멈췄다 풀고, binge-watch는 [빈-쥐-왓-취]로 끊김 없이 이어집니다.",
+            trans: "저는 그냥 집에서 편하게 쉬면서 새로 나온 시리즈나 정주행하려고요."
+          },
+          {
+            speaker: "B",
+            name: "Sam",
+            text: "Sounds like the perfect way to unwind. Have a good one!",
+            ipa: "[saʊndz laɪk ðə ˈpɜːrfɪkt weɪ tuː ʌnˈwaɪnd. hæv ə ɡʊd wʌn]",
+            linking: "Have a good one은 [해-버 구-드원]처럼 세 단어를 하나의 덩어리로 툭 뱉어냅니다.",
+            trans: "피로 풀기 딱 좋네요. 주말 잘 보내세요!"
+          }
+        ],
+        expressions: [
+          {
+            phrase: "call it a day",
+            meaning: "그날의 일이나 업무를 마무리하고 퇴근하다",
+            example: "It's past 7 PM, let's call it a day."
+          },
+          {
+            phrase: "beat the traffic",
+            meaning: "교통 체증(러시아워)을 피하다, 차 밀리기 전에 가다",
+            example: "We left early in the morning to beat the holiday traffic."
+          },
+          {
+            phrase: "run errands",
+            meaning: "(장보기, 은행 등) 일상적인 자잘한 볼일을 보다",
+            example: "I spent my Saturday morning running errands."
+          },
+          {
+            phrase: "unwind",
+            meaning: "(태엽 풀리듯) 피로와 긴장을 풀고 쉬다",
+            example: "Listening to acoustic music helps me unwind after work."
+          }
+        ],
+        quizzes: [
+          {
+            question: "오늘 업무를 여기서 마치고 퇴근하자는 말을 하고 싶을 때:",
+            prompt: "It's getting late. Let's ____ ____ ____ ____.",
+            answers: ["call it a day"],
+            hint: "call + it + a + day"
+          },
+          {
+            question: "러시아워 차 막히는 시간을 피해서 일찍 떠난다고 할 때:",
+            prompt: "I'm leaving now to ____ ____ ____.",
+            answers: ["beat the traffic"],
+            hint: "beat + the + traffic"
+          },
+          {
+            question: "주말에 장보기나 세탁소 등 자잘한 볼일을 본다고 할 때:",
+            prompt: "I need to spend this afternoon ____ ____.",
+            answers: ["running errands", "run errands"],
+            hint: "errands(볼일)와 어울리는 동사"
+          }
+        ]
+      },
+      {
+        id: "day3",
+        dayNum: "Day 3",
+        category: "Agile Project Sync",
+        title: "Checking In on Project Deadlines",
+        subtitle: "동료와 진행 중인 프로젝트 일정과 우선순위를 조율할 때",
+        dialogues: [
+          {
+            speaker: "A",
+            name: "Chris",
+            text: "Hey, do you have a quick minute to touch base on the client presentation?",
+            ipa: "[heɪ, duː juː hæv ə kwɪk ˈmɪnɪt tuː tʌtʃ beɪs ɑːn ðə ˈklaɪənt ˌpreznˈteɪʃn]",
+            linking: "have a는 [해-버], touch base on은 base와 on이 이어져 [베이스-안]으로 부드럽게 연결됩니다.",
+            trans: "저기, 클라이언트 발표 자료 관련해서 잠깐 얘기 나눌 시간 있나요?"
+          },
+          {
+            speaker: "B",
+            name: "Taylor",
+            text: "Sure! I'm on track with the slides, but I might need your input on the budget slide.",
+            ipa: "[ʃʊr! aɪm ɑːn træk wɪð ðə slaɪdz, bʌt aɪ maɪt niːd jɔːr ˈɪnpʊt ɑːn ðə ˈbʌdʒɪt slaɪd]",
+            linking: "I'm on은 [아이-만], need your는 d와 y가 만나 [니-쥬어], input on은 [인-푸-탄]으로 이어집니다.",
+            trans: "그럼요! 슬라이드는 일정대로 잘 진행되고 있는데, 예산 슬라이드에 조언(피드백)이 좀 필요할 것 같아요."
+          },
+          {
+            speaker: "A",
+            name: "Chris",
+            text: "No problem at all. Are we still good to wrap everything up by tomorrow afternoon?",
+            ipa: "[noʊ ˈprɑːbləm ət ɔːl. ɑːr wiː stɪl ɡʊd tuː ræp ˈevriθɪŋ ʌp baɪ təˈmɔːroʊ ˌæftərˈnuːn]",
+            linking: "at all은 [애-톨], wrap everything up은 p와 u가 만나 [래-페브리씽-업]으로 한 덩어리로 흐릅니다.",
+            trans: "문제없죠. 내일 오후까지는 전부 마무리할 수 있는 상태인 거죠?"
+          },
+          {
+            speaker: "B",
+            name: "Taylor",
+            text: "As long as we don't hit any unexpected roadblocks, we should be fine.",
+            ipa: "[æz lɔːŋ æz wiː doʊnt hɪt ˈeni ˌʌnɪkˈspektɪd ˈroʊdblæks, wiː ʃʊd biː faɪn]",
+            linking: "hit any는 t가 모음 사이에서 굴러가 [히-레니]처럼 플랩(flap) 사운드로 발음됩니다.",
+            trans: "예상치 못한 걸림돌만 없다면 충분히 맞출 수 있을 거예요."
+          },
+          {
+            speaker: "A",
+            name: "Chris",
+            text: "Great. Shoot me an email with the current draft, and I'll look it over.",
+            ipa: "[ɡreɪt. ʃuːt miː ən ˈiːmeɪl wɪð ðə ˈkɜːrənt dræft, ənd aɪl lʊk ɪt ˈoʊvər]",
+            linking: "look it over는 세 단어가 연음되어 [루-키-도-버]처럼 한 호흡으로 굴러갑니다.",
+            trans: "좋습니다. 지금 작성된 초안 이메일로 쏴주시면 제가 훑어볼게요."
+          },
+          {
+            speaker: "B",
+            name: "Taylor",
+            text: "Will do. Thanks for following up on this so quickly!",
+            ipa: "[wɪl duː. θæŋks fər ˈfɑːloʊɪŋ ʌp ɑːn ðɪs soʊ ˈkwɪkli]",
+            linking: "following up on은 [팔로잉-어-판]으로 p와 on이 자연스럽게 붙습니다.",
+            trans: "바로 보낼게요. 빠르게 챙겨봐 줘서 고마워요!"
+          }
+        ],
+        expressions: [
+          {
+            phrase: "touch base",
+            meaning: "(상황, 진척을 공유하기 위해) 잠깐 이야기를 나누다",
+            example: "Let's touch base first thing tomorrow morning."
+          },
+          {
+            phrase: "on track",
+            meaning: "일정이나 계획대로 순조롭게 진행 중인",
+            example: "The project timeline is right on track."
+          },
+          {
+            phrase: "hit a roadblock",
+            meaning: "(예기치 않은) 걸림돌, 난관에 부딪히다",
+            example: "We hit a roadblock with the API integration."
+          },
+          {
+            phrase: "look something over",
+            meaning: "~을 검토하다, 빠르게 훑어보다",
+            example: "Could you look over my proposal before I send it?"
+          }
+        ],
+        quizzes: [
+          {
+            question: "상대방과 진행 상황에 대해 '잠깐 이야기 좀 나누자'고 제안할 때:",
+            prompt: "Do you have a minute to ____ ____ on the sprint?",
+            answers: ["touch base"],
+            hint: "touch + base"
+          },
+          {
+            question: "프로젝트가 차질 없이 '순조롭게 일정대로 진행 중'이라고 말할 때:",
+            prompt: "Don't worry, the release is right ____ ____.",
+            answers: ["on track"],
+            hint: "on + track"
+          },
+          {
+            question: "보고서나 초안을 '가볍게 훑어보고 검토해 주다'라고 할 때:",
+            prompt: "I'll ____ ____ your draft this afternoon.",
+            answers: ["look over"],
+            hint: "look + over"
+          }
+        ]
+      }
+    ];
+
+    let currentLessonIndex = 0;
+    let currentTab = 'dialogue';
+    let isAutoplaying = false;
+    let autoplayTimeout = null;
+
+    let showTranslations = true;
+    let showPronunciation = true; // Controls both IPA and Connected Speech linking tips
+
+    const LS_COMPLETED_KEY = 'daily30_completed_lessons';
+    const LS_STREAK_KEY = 'daily30_streak_info';
+
+    window.addEventListener('DOMContentLoaded', () => {
+      initApp();
+    });
+
+    function initApp() {
+      renderLessonPills();
+      loadLesson(0);
+      updateStreakDisplay();
+      
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.onvoiceschanged = () => {
+          window.speechSynthesis.getVoices();
+        };
+      }
+    }
+
+    function renderLessonPills() {
+      const container = document.getElementById('dayPillsContainer');
+      container.innerHTML = '';
+
+      const completedMap = getCompletedLessons();
+
+      LESSONS.forEach((lesson, index) => {
+        const isSelected = index === currentLessonIndex;
+        const isCompleted = !!completedMap[lesson.id];
+
+        const pill = document.createElement('button');
+        pill.className = `shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all flex items-center gap-1.5 ${
+          isSelected
+            ? 'bg-blue-600 text-white shadow-md shadow-blue-500/25'
+            : 'bg-slate-800 border border-slate-700/80 text-slate-300 hover:bg-slate-700'
+        }`;
+        pill.onclick = () => loadLesson(index);
+
+        let iconSvg = '';
+        if (isCompleted) {
+          iconSvg = `<svg class="w-3.5 h-3.5 text-emerald-400 fill-current" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>`;
+        }
+
+        pill.innerHTML = `<span>${lesson.dayNum}</span> ${iconSvg}`;
+        container.appendChild(pill);
+      });
+    }
+
+    function loadLesson(index) {
+      stopAutoplay();
+      currentLessonIndex = index;
+      const lesson = LESSONS[index];
+
+      document.getElementById('lessonBadge').textContent = `${lesson.dayNum} • ${lesson.category}`;
+      document.getElementById('lessonTitle').textContent = lesson.title;
+      document.getElementById('lessonSubtitle').textContent = lesson.subtitle;
+
+      updateCompletionBtnState();
+      renderDialogue(lesson.dialogues);
+      renderExpressions(lesson.expressions);
+      renderQuiz(lesson.quizzes);
+      renderLessonPills();
+    }
+
+    function renderDialogue(lines) {
+      const container = document.getElementById('dialogueList');
+      container.innerHTML = '';
+
+      lines.forEach((line, idx) => {
+        const card = document.createElement('div');
+        card.id = `dialogue-line-${idx}`;
+        card.className = `p-3.5 rounded-2xl border transition-all duration-200 ${
+          line.speaker === 'A'
+            ? 'bg-slate-800/60 border-slate-700/60'
+            : 'bg-slate-800/90 border-slate-700'
+        }`;
+
+        card.innerHTML = `
+          <div class="flex items-start justify-between gap-2.5">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg text-xs font-bold flex items-center justify-center shrink-0 ${
+                line.speaker === 'A' 
+                  ? 'bg-blue-600/30 text-blue-300 border border-blue-500/40' 
+                  : 'bg-emerald-600/30 text-emerald-300 border border-emerald-500/40'
+              }">${line.speaker}</span>
+              <span class="text-xs font-semibold text-slate-300">${line.name}</span>
+            </div>
+            <button onclick="speakLine(${idx})" class="p-2 rounded-xl bg-slate-700/60 hover:bg-slate-600 text-slate-200 active:scale-95 transition-all shadow-sm" title="이 문장 듣기">
+              <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- English Sentence -->
+          <div class="mt-2 text-sm font-semibold text-white tracking-wide leading-relaxed">
+            ${line.text}
+          </div>
+
+          <!-- Pronunciation & Linked Speech Container -->
+          <div class="line-pronunciation-group mt-2 space-y-1.5 ${showPronunciation ? '' : 'hidden'}">
+            <!-- IPA -->
+            <div class="text-[11px] text-blue-400 font-mono tracking-tight bg-blue-950/40 px-2.5 py-1 rounded-lg border border-blue-900/40 inline-block">
+              ${line.ipa}
+            </div>
+
+            <!-- 연음 및 소리 연결 팁 -->
+            <div class="text-xs text-amber-200/90 bg-amber-500/10 border border-amber-500/25 rounded-xl p-2.5 flex items-start gap-2">
+              <span class="text-amber-400 font-bold shrink-0 text-[11px] px-1.5 py-0.5 rounded bg-amber-400/20 border border-amber-400/30">연음</span>
+              <span class="leading-relaxed text-[11px]">${line.linking}</span>
+            </div>
+          </div>
+
+          <!-- Korean Translation -->
+          <div class="line-trans text-xs text-slate-400 mt-2.5 pt-2 border-t border-slate-700/50 leading-relaxed ${showTranslations ? '' : 'hidden'}">
+            ${line.trans}
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+    }
+
+    function renderExpressions(expressions) {
+      const container = document.getElementById('expressionsList');
+      container.innerHTML = '';
+
+      expressions.forEach((item) => {
+        const box = document.createElement('div');
+        box.className = 'p-3.5 rounded-2xl bg-slate-800/70 border border-slate-700/80';
+        box.innerHTML = `
+          <div class="flex items-baseline justify-between gap-2">
+            <h4 class="text-sm font-bold text-blue-400">${item.phrase}</h4>
+            <span class="text-xs text-slate-300 font-medium">${item.meaning}</span>
+          </div>
+          <div class="mt-2 text-xs bg-slate-900/70 p-2.5 rounded-xl border border-slate-800 text-slate-300 leading-relaxed">
+            <span class="text-slate-500 font-bold mr-1">Ex:</span> "${item.example}"
+          </div>
+        `;
+        container.appendChild(box);
+      });
+    }
+
+    function renderQuiz(quizzes) {
+      const container = document.getElementById('quizList');
+      container.innerHTML = '';
+
+      quizzes.forEach((quiz, idx) => {
+        const box = document.createElement('div');
+        box.className = 'p-4 rounded-2xl bg-slate-800/80 border border-slate-700/80 space-y-2.5';
+        box.id = `quiz-card-${idx}`;
+
+        box.innerHTML = `
+          <div class="flex items-start justify-between gap-2">
+            <span class="text-[11px] font-bold text-blue-400 uppercase tracking-wider">Q${idx + 1}.</span>
+            <button onclick="toggleQuizHint(${idx})" class="text-[11px] text-slate-400 hover:text-amber-400 flex items-center gap-1">
+              <span>💡 힌트 보기</span>
+            </button>
+          </div>
+          <p class="text-xs text-slate-300 leading-relaxed">${quiz.question}</p>
+          <div class="p-2.5 bg-slate-900/80 rounded-xl border border-slate-700 font-mono text-xs text-amber-300 font-medium">
+            ${quiz.prompt}
+          </div>
+          
+          <div id="quiz-hint-${idx}" class="text-[11px] text-amber-300 bg-amber-500/10 p-2.5 rounded-xl border border-amber-500/20 hidden">
+            힌트: ${quiz.hint}
+          </div>
+
+          <div class="flex gap-2 mt-2">
+            <input type="text" id="quiz-input-${idx}" placeholder="정답을 입력하세요" class="flex-1 bg-slate-900 border border-slate-700 text-white text-xs px-3 py-2 rounded-xl focus:border-blue-500 outline-none" />
+            <button onclick="checkQuizAnswer(${idx})" class="px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-xs text-white active:scale-95 transition-all">확인</button>
+          </div>
+
+          <div id="quiz-feedback-${idx}" class="text-xs font-semibold hidden pt-1"></div>
+        `;
+
+        container.appendChild(box);
+      });
+    }
+
+    function toggleQuizHint(index) {
+      const el = document.getElementById(`quiz-hint-${index}`);
+      if (el) el.classList.toggle('hidden');
+    }
+
+    function checkQuizAnswer(index) {
+      const input = document.getElementById(`quiz-input-${index}`);
+      const feedback = document.getElementById(`quiz-feedback-${index}`);
+      const quiz = LESSONS[currentLessonIndex].quizzes[index];
+
+      const userVal = input.value.trim().toLowerCase();
+      const isCorrect = quiz.answers.some(ans => ans.toLowerCase() === userVal);
+
+      feedback.classList.remove('hidden', 'text-emerald-400', 'text-rose-400');
+
+      if (isCorrect) {
+        feedback.classList.add('text-emerald-400');
+        feedback.innerHTML = `✓ 정확합니다! 완벽해요!`;
+      } else {
+        feedback.classList.add('text-rose-400');
+        feedback.innerHTML = `✗ 다시 시도해보세요. (정답: <strong>${quiz.answers[0]}</strong>)`;
+      }
+    }
+
+    function resetQuiz() {
+      renderQuiz(LESSONS[currentLessonIndex].quizzes);
+    }
+
+    function getTTSVoice(speaker) {
+      if (!('speechSynthesis' in window)) return null;
+      const voices = window.speechSynthesis.getVoices();
+      const enVoices = voices.filter(v => v.lang.startsWith('en'));
+      if (enVoices.length === 0) return null;
+
+      if (speaker === 'B' && enVoices.length > 1) {
+        return enVoices[1];
+      }
+      return enVoices[0];
+    }
+
+    function speakLine(index, onComplete) {
+      if (!('speechSynthesis' in window)) {
+        if (onComplete) onComplete();
+        return;
+      }
+
+      window.speechSynthesis.cancel();
+
+      const line = LESSONS[currentLessonIndex].dialogues[index];
+      const utterance = new SpeechSynthesisUtterance(line.text);
+      utterance.lang = 'en-US';
+      utterance.rate = 0.90; // Slightly calm speed to hear linking clearly
+      
+      const voice = getTTSVoice(line.speaker);
+      if (voice) utterance.voice = voice;
+
+      highlightLine(index);
+
+      utterance.onend = () => {
+        unhighlightLine(index);
+        if (onComplete) onComplete();
+      };
+
+      utterance.onerror = () => {
+        unhighlightLine(index);
+        if (onComplete) onComplete();
+      };
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function highlightLine(index) {
+      document.querySelectorAll('#dialogueList > div').forEach(div => div.classList.remove('line-playing'));
+      const activeEl = document.getElementById(`dialogue-line-${index}`);
+      if (activeEl) {
+        activeEl.classList.add('line-playing');
+        activeEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+
+    function unhighlightLine(index) {
+      const activeEl = document.getElementById(`dialogue-line-${index}`);
+      if (activeEl) activeEl.classList.remove('line-playing');
+    }
+
+    function autoplayDialogue() {
+      if (isAutoplaying) {
+        stopAutoplay();
+        return;
+      }
+
+      isAutoplaying = true;
+      document.getElementById('autoplayBtn').classList.add('bg-blue-600', 'text-white');
+      document.getElementById('autoplayText').textContent = '재생 중지';
+
+      const lines = LESSONS[currentLessonIndex].dialogues;
+      let currentIndex = 0;
+
+      function playNext() {
+        if (!isAutoplaying || currentIndex >= lines.length) {
+          stopAutoplay();
+          return;
+        }
+
+        speakLine(currentIndex, () => {
+          currentIndex++;
+          if (currentIndex < lines.length && isAutoplaying) {
+            autoplayTimeout = setTimeout(playNext, 650);
+          } else {
+            stopAutoplay();
+          }
+        });
+      }
+
+      playNext();
+    }
+
+    function stopAutoplay() {
+      isAutoplaying = false;
+      if (autoplayTimeout) clearTimeout(autoplayTimeout);
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      
+      document.querySelectorAll('#dialogueList > div').forEach(div => div.classList.remove('line-playing'));
+      
+      const btn = document.getElementById('autoplayBtn');
+      if (btn) {
+        btn.classList.remove('bg-blue-600', 'text-white');
+        document.getElementById('autoplayText').textContent = '전체 연속 듣기';
+      }
+    }
+
+    function toggleViewSettings() {
+      showTranslations = document.getElementById('toggleTrans').checked;
+      showPronunciation = document.getElementById('togglePronunciation').checked;
+
+      document.querySelectorAll('.line-trans').forEach(el => {
+        el.classList.toggle('hidden', !showTranslations);
+      });
+      document.querySelectorAll('.line-pronunciation-group').forEach(el => {
+        el.classList.toggle('hidden', !showPronunciation);
+      });
+    }
+
+    function switchTab(tabName) {
+      currentTab = tabName;
+
+      ['dialogue', 'expressions', 'quiz'].forEach(t => {
+        const btn = document.getElementById(`tabBtn-${t}`);
+        const section = document.getElementById(`tab-${t}`);
+        if (t === tabName) {
+          btn.className = 'tab-btn py-2 text-xs font-bold rounded-xl transition-all text-white bg-blue-600 shadow-sm';
+          section.classList.remove('hidden');
+        } else {
+          btn.className = 'tab-btn py-2 text-xs font-bold rounded-xl transition-all text-slate-400 hover:text-slate-200';
+          section.classList.add('hidden');
+        }
+      });
+    }
+
+    function getCompletedLessons() {
+      try {
+        return JSON.parse(localStorage.getItem(LS_COMPLETED_KEY)) || {};
+      } catch (e) {
+        return {};
+      }
+    }
+
+    function toggleLessonCompletion() {
+      const lesson = LESSONS[currentLessonIndex];
+      const completed = getCompletedLessons();
+
+      if (completed[lesson.id]) {
+        delete completed[lesson.id];
+      } else {
+        completed[lesson.id] = new Date().toISOString();
+        triggerStreakUpdate();
+      }
+
+      localStorage.setItem(LS_COMPLETED_KEY, JSON.stringify(completed));
+      updateCompletionBtnState();
+      renderLessonPills();
+      updateStreakDisplay();
+    }
+
+    function updateCompletionBtnState() {
+      const lesson = LESSONS[currentLessonIndex];
+      const completed = getCompletedLessons();
+      const isDone = !!completed[lesson.id];
+
+      const btn = document.getElementById('completeBtn');
+      const text = document.getElementById('completeBtnText');
+      const icon = document.getElementById('completeCheckIcon');
+
+      if (isDone) {
+        btn.className = 'shrink-0 p-2.5 rounded-2xl border transition-all text-xs font-semibold flex items-center gap-1.5 bg-emerald-500/20 border-emerald-500/40 text-emerald-300 active:scale-95 shadow-sm';
+        text.textContent = '학습 완료됨';
+        icon.className = 'w-4 h-4 text-emerald-400';
+      } else {
+        btn.className = 'shrink-0 p-2.5 rounded-2xl border transition-all text-xs font-semibold flex items-center gap-1.5 bg-slate-800/80 border-slate-700 text-slate-300 active:scale-95 shadow-sm';
+        text.textContent = '오늘 공부 완료';
+        icon.className = 'w-4 h-4 text-slate-400';
+      }
+    }
+
+    function triggerStreakUpdate() {
+      const today = new Date().toDateString();
+      let streakInfo = { lastDate: '', count: 0 };
+      try {
+        streakInfo = JSON.parse(localStorage.getItem(LS_STREAK_KEY)) || streakInfo;
+      } catch (e) {}
+
+      if (streakInfo.lastDate === today) return;
+
+      const yesterday = new Date(Date.now() - 86400000).toDateString();
+      if (streakInfo.lastDate === yesterday) {
+        streakInfo.count += 1;
+      } else {
+        streakInfo.count = 1;
+      }
+      streakInfo.lastDate = today;
+
+      localStorage.setItem(LS_STREAK_KEY, JSON.stringify(streakInfo));
+    }
+
+    function updateStreakDisplay() {
+      let streakInfo = { lastDate: '', count: 0 };
+      try {
+        streakInfo = JSON.parse(localStorage.getItem(LS_STREAK_KEY)) || streakInfo;
+      } catch (e) {}
+
+      const display = document.getElementById('streakDisplay');
+      if (display) {
+        display.textContent = `${streakInfo.count || 0}일 연속`;
+      }
+    }
+
+    function showPwaGuideModal() {
+      document.getElementById('pwaModal').classList.remove('hidden');
+    }
+
+    function closePwaGuideModal() {
+      document.getElementById('pwaModal').classList.add('hidden');
+    }
+  </script>
+</body>
+</html>
