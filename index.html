@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#2563eb" />
+  <meta name="theme-color" content="#1e293b" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Daily 30 English" />
-  <title>Daily 30 English - 30분 영어 습관 & 연음 훈련</title>
+  <meta name="apple-mobile-web-app-title" content="Daily30" />
+  <title>Daily 30 English - 30일 실전 회화 & 연음 완성</title>
 
-  <!-- Google Font & Tailwind CSS -->
+  <!-- Google Fonts & Tailwind CSS CDN -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet" />
@@ -18,16 +18,16 @@
   <!-- PWA Dynamic Web App Manifest Injection -->
   <script>
     const manifestJson = {
-      name: "Daily 30 English",
+      name: "Daily 30 English Master",
       short_name: "Daily30",
-      description: "하루 30분 직장인 실전 영어 다이얼로그 & 연음 트레이닝",
+      description: "하루 30분 실전 직장인 회화, 연음 훈련 & 자동 30일 루틴",
       start_url: "./index.html",
       display: "standalone",
       background_color: "#0f172a",
-      theme_color: "#2563eb",
+      theme_color: "#1e293b",
       icons: [
         {
-          src: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' fill='%232563eb'><rect width='512' height='512' rx='120' fill='%232563eb'/><text x='50%' y='58%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='260' font-weight='bold' fill='white'>30</text></svg>",
+          src: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' fill='%233b82f6'><rect width='512' height='512' rx='120' fill='%232563eb'/><text x='50%' y='58%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='240' font-weight='bold' fill='white'>30</text></svg>",
           sizes: "512x512",
           type: "image/svg+xml",
           purpose: "any maskable"
@@ -35,10 +35,9 @@
       ]
     };
     const blob = new Blob([JSON.stringify(manifestJson)], { type: 'application/json' });
-    const manifestURL = URL.createObjectURL(blob);
     const linkTag = document.createElement('link');
     linkTag.rel = 'manifest';
-    linkTag.href = manifestURL;
+    linkTag.href = URL.createObjectURL(blob);
     document.head.appendChild(linkTag);
   </script>
 
@@ -49,15 +48,16 @@
       user-select: none;
     }
     .safe-top {
-      padding-top: env(safe-area-inset-top, 16px);
+      padding-top: env(safe-area-inset-top, 14px);
     }
     .safe-bottom {
-      padding-bottom: env(safe-area-inset-bottom, 20px);
+      padding-bottom: env(safe-area-inset-bottom, 18px);
     }
     .line-playing {
       border-color: #3b82f6 !important;
-      background-color: rgba(59, 130, 246, 0.12) !important;
-      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.35);
+      background-color: rgba(59, 130, 246, 0.15) !important;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.4);
+      transform: translateY(-1px);
     }
     .no-scrollbar::-webkit-scrollbar {
       display: none;
@@ -68,72 +68,88 @@
     }
   </style>
 </head>
-<body class="bg-slate-900 text-slate-100 antialiased min-h-screen flex flex-col justify-between selection:bg-blue-500 selection:text-white">
+<body class="bg-slate-950 text-slate-100 antialiased min-h-screen flex flex-col justify-between selection:bg-blue-600 selection:text-white">
 
-  <header class="safe-top bg-slate-900/95 backdrop-blur-md sticky top-0 z-30 border-b border-slate-800 px-4 pt-4 pb-3">
+  <header class="safe-top bg-slate-900/95 backdrop-blur-md sticky top-0 z-30 border-b border-slate-800 px-4 pt-3 pb-2.5">
     <div class="max-w-md mx-auto flex items-center justify-between">
       <div class="flex items-center gap-2.5">
-        <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-indigo-400 flex items-center justify-center font-extrabold text-white text-base shadow-lg shadow-blue-500/25">
+        <div class="w-9 h-9 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center font-extrabold text-white text-sm shadow-md shadow-blue-500/20">
           30
         </div>
         <div>
-          <h1 class="text-base font-bold tracking-tight text-white flex items-center gap-1.5">
-            Daily English
-            <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30">PWA</span>
-          </h1>
-          <p class="text-xs text-slate-400">30분 다이얼로그 & 연음(발음) 훈련</p>
+          <div class="flex items-center gap-1.5">
+            <h1 class="text-sm font-bold tracking-tight text-white">Daily English</h1>
+            <span id="todayBadgeIndicator" class="text-[10px] font-bold px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">오늘의 학습</span>
+          </div>
+          <p id="calendarDateDisplay" class="text-[11px] text-slate-400">자동 일차 계산 중...</p>
         </div>
       </div>
 
-      <!-- Streak Badge -->
-      <div class="flex items-center gap-2">
-        <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800/90 border border-slate-700/80 text-xs font-semibold text-amber-400 shadow-sm">
-          <svg class="w-4 h-4 fill-current text-amber-400" viewBox="0 0 24 24">
+      <!-- Streak & Settings Actions -->
+      <div class="flex items-center gap-1.5">
+        <div class="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-slate-800 border border-slate-700 text-xs font-semibold text-amber-400">
+          <svg class="w-3.5 h-3.5 fill-current text-amber-400" viewBox="0 0 24 24">
             <path d="M12.9 2.1c.3.5.3 1.1 0 1.6-1.4 2.2-1.9 3.8-1.9 5.3 0 1.9 1.1 3.5 2.7 4.3.4.2.7.6.7 1 0 .7-.6 1.3-1.3 1.3-.2 0-.4 0-.6-.1-2.4-1-3.9-3.4-3.9-6 0-1.7.6-3.7 1.8-5.7.5-.8 1.7-1.3 2.5-.4zm4.6 6.3c.3.5.2 1.1-.2 1.5-1.9 1.9-2.7 3.5-2.7 5.1 0 2.2 1.4 4.1 3.4 4.8.4.1.7.5.7.9 0 .6-.5 1.1-1.1 1.1-.3 0-.6-.1-.8-.2-2.8-1.1-4.7-3.8-4.7-6.9 0-2.1 1-4.2 2.9-6.5.6-.7 1.7-.6 2.5.2z"/>
           </svg>
-          <span id="streakDisplay">0일 연속</span>
+          <span id="streakDisplay">0일</span>
         </div>
+        <button onclick="toggleSettingsModal()" class="p-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white border border-slate-700" title="설정">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+        </button>
       </div>
     </div>
 
-    <!-- Lesson Navigation Pills -->
-    <div class="max-w-md mx-auto mt-3.5 flex gap-2 overflow-x-auto no-scrollbar pb-1" id="dayPillsContainer">
-      <!-- Injected via JavaScript -->
+    <!-- 30-Day Horizontal Scroll Carousel -->
+    <div class="max-w-md mx-auto mt-2.5 flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1" id="dayPillsContainer">
+      <!-- Generated 30 Days dynamically via JavaScript -->
     </div>
   </header>
 
-  <main class="max-w-md mx-auto w-full px-4 pt-4 pb-28 flex-1">
-    
-    <!-- Lesson Banner & Toggle Hub -->
-    <div class="bg-gradient-to-br from-slate-800/95 via-slate-800/70 to-slate-900 border border-slate-700/70 rounded-3xl p-4.5 mb-4 shadow-sm relative overflow-hidden">
+  <!-- Main Content Container -->
+  <main class="max-w-md mx-auto w-full px-4 pt-3.5 pb-24 flex-1">
+
+    <!-- Active Lesson Card Banner -->
+    <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 border border-slate-700/80 rounded-3xl p-4 mb-3.5 shadow-md relative overflow-hidden">
       <div class="flex items-start justify-between gap-2">
-        <div>
-          <span id="lessonBadge" class="text-xs font-bold text-blue-400 uppercase tracking-wider">Day 1 • Morning Small Talk</span>
-          <h2 id="lessonTitle" class="text-lg font-bold text-white mt-1 leading-snug">Need My Morning Caffeine Fix</h2>
-          <p id="lessonSubtitle" class="text-xs text-slate-400 mt-0.5">출근 직후 탕비실에서 동료와 가볍게 나누는 대화</p>
+        <div class="flex-1 pr-1">
+          <div class="flex items-center gap-2">
+            <span id="lessonBadge" class="text-[11px] font-extrabold text-blue-400 uppercase tracking-wider">Day 1</span>
+            <span id="autoTodayTag" class="text-[10px] bg-blue-500/20 text-blue-300 px-2 py-0.2 rounded-md font-semibold border border-blue-500/30 hidden">오늘 날짜 진도</span>
+          </div>
+          <h2 id="lessonTitle" class="text-base font-bold text-white mt-1 leading-snug">로딩 중...</h2>
+          <p id="lessonSubtitle" class="text-xs text-slate-400 mt-0.5 leading-relaxed">대화 상황 설명을 불러오는 중입니다.</p>
         </div>
-        <button id="completeBtn" onclick="toggleLessonCompletion()" class="shrink-0 p-2.5 rounded-2xl border transition-all text-xs font-semibold flex items-center gap-1.5 bg-slate-800/80 border-slate-700 text-slate-300 active:scale-95 shadow-sm">
+
+        <button id="completeBtn" onclick="toggleLessonCompletion()" class="shrink-0 p-2.5 rounded-2xl border transition-all text-xs font-semibold flex flex-col items-center justify-center gap-1 bg-slate-800 border-slate-700 text-slate-300 active:scale-95 shadow-sm min-w-[72px]">
           <svg id="completeCheckIcon" class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
           </svg>
-          <span id="completeBtnText">오늘 공부 완료</span>
+          <span id="completeBtnText" class="text-[10px]">완료 체크</span>
         </button>
       </div>
 
-      <!-- Quick Toggles Toolbar -->
-      <div class="mt-4 pt-3.5 border-t border-slate-700/60 flex items-center justify-between text-xs">
-        <div class="flex items-center gap-3">
-          <label class="flex items-center gap-1.5 cursor-pointer text-slate-300 hover:text-white transition-colors">
-            <input type="checkbox" id="toggleTrans" checked onchange="toggleViewSettings()" class="rounded bg-slate-700 border-slate-600 text-blue-600 focus:ring-0 w-3.5 h-3.5" />
-            <span class="font-medium">해석 보기</span>
+      <!-- Controls: Audio, Speed & Display Toggles -->
+      <div class="mt-3.5 pt-3 border-t border-slate-700/60 flex flex-wrap items-center justify-between gap-2 text-xs">
+        <div class="flex items-center gap-2.5">
+          <label class="flex items-center gap-1.5 cursor-pointer text-slate-300">
+            <input type="checkbox" id="toggleTrans" checked onchange="toggleViewSettings()" class="rounded bg-slate-800 border-slate-700 text-blue-600 focus:ring-0 w-3.5 h-3.5" />
+            <span class="font-medium text-[11px]">해석</span>
           </label>
-          <label class="flex items-center gap-1.5 cursor-pointer text-slate-300 hover:text-white transition-colors">
-            <input type="checkbox" id="togglePronunciation" checked onchange="toggleViewSettings()" class="rounded bg-slate-700 border-slate-600 text-blue-600 focus:ring-0 w-3.5 h-3.5" />
-            <span class="font-medium">발음 & 연음 팁</span>
+          <label class="flex items-center gap-1.5 cursor-pointer text-slate-300">
+            <input type="checkbox" id="togglePronunciation" checked onchange="toggleViewSettings()" class="rounded bg-slate-800 border-slate-700 text-blue-600 focus:ring-0 w-3.5 h-3.5" />
+            <span class="font-medium text-[11px]">연음 팁</span>
           </label>
+          <div class="flex items-center bg-slate-800 rounded-lg p-0.5 border border-slate-700 text-[11px]">
+            <button onclick="setTtsSpeed(0.8)" id="speedBtn-0.8" class="px-1.5 py-0.5 rounded text-slate-400">0.8x</button>
+            <button onclick="setTtsSpeed(0.9)" id="speedBtn-0.9" class="px-1.5 py-0.5 rounded bg-blue-600 text-white font-bold">0.9x</button>
+            <button onclick="setTtsSpeed(1.0)" id="speedBtn-1.0" class="px-1.5 py-0.5 rounded text-slate-400">1.0x</button>
+          </div>
         </div>
 
-        <button onclick="autoplayDialogue()" id="autoplayBtn" class="flex items-center gap-1.5 bg-blue-600/20 border border-blue-500/30 hover:bg-blue-600/30 text-blue-300 font-semibold px-2.5 py-1.5 rounded-xl transition-all active:scale-95">
+        <button onclick="autoplayDialogue()" id="autoplayBtn" class="flex items-center gap-1.5 bg-blue-600/20 border border-blue-500/40 hover:bg-blue-600/30 text-blue-300 font-bold px-2.5 py-1.5 rounded-xl transition-all active:scale-95 text-[11px]">
           <svg id="autoplayIcon" class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
             <path d="M8 5v14l11-7z"/>
           </svg>
@@ -142,450 +158,493 @@
       </div>
     </div>
 
-    <!-- Navigation Tabs -->
-    <div class="grid grid-cols-3 gap-1 bg-slate-800/80 p-1 rounded-2xl border border-slate-700/70 mb-4">
-      <button onclick="switchTab('dialogue')" id="tabBtn-dialogue" class="tab-btn py-2 text-xs font-bold rounded-xl transition-all text-white bg-blue-600 shadow-sm">
-        다이얼로그 (6)
+    <!-- 3 Core Learning Tabs -->
+    <div class="grid grid-cols-3 gap-1 bg-slate-900/90 p-1 rounded-2xl border border-slate-800 mb-3.5">
+      <button onclick="switchTab('dialogue')" id="tabBtn-dialogue" class="py-2 text-xs font-bold rounded-xl transition-all text-white bg-blue-600 shadow-sm">
+        다이얼로그 & 연음
       </button>
-      <button onclick="switchTab('expressions')" id="tabBtn-expressions" class="tab-btn py-2 text-xs font-bold rounded-xl transition-all text-slate-400 hover:text-slate-200">
-        핵심 표현
+      <button onclick="switchTab('expressions')" id="tabBtn-expressions" class="py-2 text-xs font-bold rounded-xl transition-all text-slate-400 hover:text-slate-200">
+        핵심 표현 (3)
       </button>
-      <button onclick="switchTab('quiz')" id="tabBtn-quiz" class="tab-btn py-2 text-xs font-bold rounded-xl transition-all text-slate-400 hover:text-slate-200">
-        빈칸 퀴즈 (3)
+      <button onclick="switchTab('quiz')" id="tabBtn-quiz" class="py-2 text-xs font-bold rounded-xl transition-all text-slate-400 hover:text-slate-200">
+        빈칸 퀴즈 (2~3)
       </button>
     </div>
 
-    <!-- Tab 1: Dialogue List with Linked Speech Tips -->
-    <section id="tab-dialogue" class="space-y-3.5">
-      <div id="dialogueList" class="space-y-3.5">
-        <!-- Lines injected via JS -->
-      </div>
-      <div class="mt-4 p-3.5 rounded-2xl bg-indigo-950/30 border border-indigo-900/40 text-xs text-indigo-300 flex items-start gap-2.5">
-        <svg class="w-4.5 h-4.5 shrink-0 text-indigo-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-        </svg>
-        <span class="leading-relaxed"><strong>연음 훈련 팁:</strong> 단어를 한 단어씩 딱딱 끊지 말고, 주황색 연음 가이드처럼 <strong>한 단어의 음절인 것처럼 호흡을 이어서</strong> 소리 내어 보세요.</span>
+    <!-- Section 1: Dialogue Cards -->
+    <section id="tab-dialogue" class="space-y-3">
+      <div id="dialogueList" class="space-y-3">
+        <!-- Injected via JavaScript -->
       </div>
     </section>
 
-    <!-- Tab 2: Key Expressions -->
+    <!-- Section 2: Key Expressions -->
     <section id="tab-expressions" class="space-y-3 hidden">
       <div id="expressionsList" class="space-y-3">
-        <!-- Expressions injected via JS -->
+        <!-- Injected via JavaScript -->
       </div>
     </section>
 
-    <!-- Tab 3: Interactive Quiz -->
-    <section id="tab-quiz" class="space-y-4 hidden">
-      <div class="p-3.5 rounded-2xl bg-slate-800/50 border border-slate-700/60 flex items-center justify-between">
+    <!-- Section 3: Interactive Quiz -->
+    <section id="tab-quiz" class="space-y-3.5 hidden">
+      <div class="p-3.5 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-between">
         <div>
-          <h3 class="text-sm font-bold text-white">오늘 배운 표현 복습</h3>
-          <p class="text-xs text-slate-400">상황 맥락에 맞는 핵심 표현을 맞춰보세요.</p>
+          <h3 class="text-xs font-bold text-white">오늘의 핵심 문장 복습 퀴즈</h3>
+          <p class="text-[11px] text-slate-400">빈칸에 들어갈 표현을 적고 확인해 보세요.</p>
         </div>
         <button onclick="resetQuiz()" class="text-xs text-blue-400 hover:text-blue-300 underline font-medium">초기화</button>
       </div>
-      <div id="quizList" class="space-y-3.5">
-        <!-- Quiz questions injected via JS -->
+      <div id="quizList" class="space-y-3">
+        <!-- Injected via JavaScript -->
       </div>
     </section>
   </main>
 
-  <footer class="safe-bottom fixed bottom-0 left-0 right-0 z-20 bg-slate-900/95 backdrop-blur-md border-t border-slate-800/80 px-4 py-2.5">
+  <!-- Bottom Navigation Status -->
+  <footer class="safe-bottom fixed bottom-0 left-0 right-0 z-20 bg-slate-900/95 backdrop-blur-md border-t border-slate-800 px-4 py-2">
     <div class="max-w-md mx-auto flex items-center justify-between text-xs text-slate-400">
       <div class="flex items-center gap-2">
-        <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-        <span>모바일 브라우저 PWA 지원</span>
+        <button onclick="jumpToCalculatedToday()" class="px-2.5 py-1 rounded-lg bg-blue-600/20 border border-blue-500/30 text-blue-300 font-semibold hover:bg-blue-600/30 transition-all flex items-center gap-1 text-[11px]">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+          </svg>
+          <span>오늘 날짜로 이동</span>
+        </button>
       </div>
-      <button onclick="showPwaGuideModal()" class="text-xs text-blue-400 font-semibold hover:underline flex items-center gap-1">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>
-        </svg>
-        홈 화면 추가 방법
-      </button>
+      <div class="flex items-center gap-1.5 text-[11px]">
+        <span class="inline-block w-2 h-2 rounded-full bg-emerald-400"></span>
+        <span id="pwaStatusText">30일 풀 데이터 내장됨</span>
+      </div>
     </div>
   </footer>
 
-  <div id="pwaModal" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-4">
-    <div class="bg-slate-800 border border-slate-700 w-full max-w-sm rounded-3xl p-5 text-slate-200 shadow-2xl">
-      <div class="flex items-center justify-between pb-3 border-b border-slate-700">
-        <h3 class="text-base font-bold text-white">홈 화면에 추가하여 앱처럼 쓰기</h3>
-        <button onclick="closePwaGuideModal()" class="text-slate-400 hover:text-white p-1">
+  <!-- Settings & Date Setup Modal -->
+  <div id="settingsModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 w-full max-w-sm rounded-3xl p-5 text-slate-200 shadow-2xl">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+        <h3 class="text-sm font-bold text-white">학습 설정 & 루틴 기준일</h3>
+        <button onclick="toggleSettingsModal()" class="text-slate-400 hover:text-white p-1">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
           </svg>
         </button>
       </div>
-      <div class="mt-4 space-y-3 text-xs text-slate-300 leading-relaxed">
-        <div class="flex gap-3">
-          <span class="w-5 h-5 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center shrink-0">1</span>
-          <p><strong>아이폰 (Safari)</strong>: 브라우저 하단 <strong>공유 아이콘 (네모 위 화살표)</strong> ➜ <strong>'홈 화면에 추가'</strong></p>
+
+      <div class="mt-4 space-y-3.5 text-xs">
+        <div>
+          <label class="text-slate-300 font-semibold block mb-1">학습 시작일 (Day 1 시작 기준)</label>
+          <input type="date" id="settingsStartDateInput" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white text-xs outline-none focus:border-blue-500" />
+          <p class="text-[11px] text-slate-400 mt-1">이 날짜를 기준으로 매일 자정마다 다음 Day로 자동 넘어갑니다.</p>
         </div>
-        <div class="flex gap-3">
-          <span class="w-5 h-5 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center shrink-0">2</span>
-          <p><strong>갤럭시 (Chrome)</strong>: 우측 상단 <strong>점 3개 메뉴</strong> ➜ <strong>'홈 화면에 추가'</strong> 또는 <strong>'앱 설치'</strong></p>
-        </div>
-        <div class="p-3 bg-slate-900/60 rounded-2xl text-slate-400 text-[11px] leading-relaxed">
-          💡 설치 후 누르면 웹 브라우저 주소창 없이 진짜 앱 화면으로 열려 매일 쾌적하게 학습할 수 있습니다.
+
+        <div class="pt-2 flex flex-col gap-2">
+          <button onclick="setTodayAsDayOne()" class="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-white text-xs transition-all">
+            오늘을 Day 1로 다시 지정하기
+          </button>
+          <button onclick="clearAllProgressData()" class="w-full py-2 rounded-xl bg-slate-800 hover:bg-rose-900/30 text-rose-300 border border-slate-700 font-medium text-xs transition-all">
+            학습 완료 기록 초기화
+          </button>
         </div>
       </div>
-      <button onclick="closePwaGuideModal()" class="w-full mt-4 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-white text-xs">
-        확인했습니다
-      </button>
     </div>
   </div>
 
   <script>
-    const LESSONS = [
+    /* Complete 30 Days of Curated Workplace & Daily Dialogues */
+    const LESSONS_MASTER = [
       {
         id: "day1",
-        dayNum: "Day 1",
-        category: "Morning Small Talk",
+        dayNum: 1,
+        category: "Morning Routine",
         title: "Need My Morning Caffeine Fix",
-        subtitle: "출근 직후 탕비실에서 동료와 가볍게 나누는 대화",
+        subtitle: "출근 직후 탕비실에서 동료와 나누는 가벼운 모닝 대화",
         dialogues: [
-          {
-            speaker: "A",
-            name: "Alex",
-            text: "Morning! You look a bit exhausted today. Did you get much sleep?",
-            ipa: "[ˈmɔːrnɪŋ! juː lʊk ə bɪt ɪɡˈzɔːstɪd təˈdeɪ. dɪd juː ɡet mʌtʃ sliːp?]",
-            linking: "look a bit은 자음과 모음이 붙어 [루-커-빗], Did you get은 d와 y가 만나 [디-쥬-겟]으로 부드럽게 이어집니다.",
-            trans: "좋은 아침! 오늘 좀 피곤해 보이는데, 잠은 좀 푹 잤어요?"
-          },
-          {
-            speaker: "B",
-            name: "Sam",
-            text: "Not really. I was up late wrapping up some personal stuff.",
-            ipa: "[nɑːt ˈriːəli. aɪ wəz ʌp leɪt ˈræpɪŋ ʌp səm ˈpɜːrsənl stʌf]",
-            linking: "was up은 [워-접], wrapping up은 p 받침이 넘어가 [래핑-업]으로 하나의 단어처럼 소리 납니다.",
-            trans: "별로요. 개인적인 일 좀 마무리하느라 늦게까지 깨어 있었어요."
-          },
-          {
-            speaker: "A",
-            name: "Alex",
-            text: "I hear you. I'm definitely going to need a second cup of coffee to get through the day.",
-            ipa: "[aɪ hɪr juː. aɪm ˈdefɪnətli ˈɡoʊɪŋ tuː niːd ə ˈsekənd kʌp əv ˈkɔːfi tuː ɡet θruː ðə deɪ]",
-            linking: "cup of coffee는 [커-퍼-커피]처럼 of의 f가 약화되어 빠르게 스치듯 연음됩니다.",
-            trans: "무슨 말인지 알죠. 저도 오늘 하루 버티려면 커피 두 잔은 마셔야겠어요."
-          },
-          {
-            speaker: "B",
-            name: "Sam",
-            text: "Same here. My brain hasn't fully kicked in yet.",
-            ipa: "[seɪm hɪr. maɪ breɪn ˈhæznt ˈfʊli kɪkt ɪn jet]",
-            linking: "kicked in의 ed([t])와 in이 연음되어 [킥-틴]으로 강하게 붙여 발음합니다.",
-            trans: "저도 마찬가지예요. 아직 뇌가 제대로 깨어나지도 않았어요."
-          },
-          {
-            speaker: "A",
-            name: "Alex",
-            text: "Well, hang in there! We've got that team catch-up before lunch.",
-            ipa: "[wel, hæŋ ɪn ðer! wiːv ɡɑːt ðæt tiːm ˈkætʃ ʌp bɪˈfɔːr lʌntʃ]",
-            linking: "hang in there는 [행-인-데어]를 한 호흡으로 뱉고, catch-up은 ch와 u가 붙어 [캐-첩]으로 소리 납니다.",
-            trans: "그래도 힘내봐요! 점심 전에 팀 회의(캐치업) 있잖아요."
-          },
-          {
-            speaker: "B",
-            name: "Sam",
-            text: "Right, I'd better pull myself together. Let's make it through today.",
-            ipa: "[raɪt, aɪd ˈbetər pʊl maɪˈself təˈɡeðər. lets meɪk ɪt θruː təˈdeɪ]",
-            linking: "I'd better는 [아이-베러], make it through는 k가 it으로 넘어가 [메이-킷-쓰루]로 연음됩니다.",
-            trans: "맞다, 정신 좀 바짝 차려야겠네요. 오늘 하루도 잘 버텨봅시다."
-          }
+          { speaker: "A", name: "Alex", text: "Morning! You look a bit exhausted today. Did you get much sleep?", ipa: "[ˈmɔːrnɪŋ! juː lʊk ə bɪt ɪɡˈzɔːstɪd təˈdeɪ. dɪd juː ɡet mʌtʃ sliːp?]", linking: "look a bit은 [루-커-빗], Did you get은 [디-쥬-겟]으로 부드럽게 연결됩니다.", trans: "좋은 아침! 오늘 좀 피곤해 보이는데, 잠은 좀 푹 잤어요?" },
+          { speaker: "B", name: "Sam", text: "Not really. I was up late wrapping up some personal stuff.", ipa: "[nɑːt ˈriːəli. aɪ wəz ʌp leɪt ˈræpɪŋ ʌp səm ˈpɜːrsənl stʌf]", linking: "was up은 [워-접], wrapping up은 p 받침이 넘어가 [래핑-업]으로 소리 납니다.", trans: "별로요. 개인적인 일 좀 마무리하느라 늦게까지 깨어 있었어요." },
+          { speaker: "A", name: "Alex", text: "I hear you. I'm definitely going to need a second cup of coffee to get through the day.", ipa: "[aɪ hɪr juː. aɪm ˈdefɪnətli ˈɡoʊɪŋ tuː niːd ə ˈsekənd kʌp əv ˈkɔːfi tuː ɡet θruː ðə deɪ]", linking: "cup of coffee는 [커-퍼-커피]처럼 of가 약화되어 빠르게 지나갑니다.", trans: "무슨 말인지 알죠. 저도 오늘 하루 버티려면 커피 두 잔은 마셔야겠어요." },
+          { speaker: "B", name: "Sam", text: "Same here. My brain hasn't fully kicked in yet.", ipa: "[seɪm hɪr. maɪ breɪn ˈhæznt ˈfʊli kɪkt ɪn jet]", linking: "kicked in의 ed와 in이 만나 [킥-틴]으로 연음됩니다.", trans: "저도 마찬가지예요. 아직 뇌가 제대로 깨어나지도 않았어요." },
+          { speaker: "A", name: "Alex", text: "Well, hang in there! We've got that team catch-up before lunch.", ipa: "[wel, hæŋ ɪn ðer! wiːv ɡɑːt ðæt tiːm ˈkætʃ ʌp bɪˈfɔːr lʌntʃ]", linking: "hang in there는 [행-인-데어], catch-up은 [캐-첩]으로 소리 납니다.", trans: "그래도 힘내봐요! 점심 전에 팀 회의(캐치업) 있잖아요." },
+          { speaker: "B", name: "Sam", text: "Right, I'd better pull myself together. Let's make it through today.", ipa: "[raɪt, aɪd ˈbetər pʊl maɪˈself təˈɡeðər. lets meɪk ɪt θruː təˈdeɪ]", linking: "I'd better는 [아이-베러], make it through는 [메이-킷-쓰루]로 연음됩니다.", trans: "맞다, 정신 바짝 차려야겠네요. 오늘 하루도 잘 버텨봅시다." }
         ],
         expressions: [
-          {
-            phrase: "wrap up ~",
-            meaning: "(일, 미팅, 작업 등을) 잘 마무리 짓다",
-            example: "Let's wrap up this meeting before noon."
-          },
-          {
-            phrase: "I hear you.",
-            meaning: "(완전 공감) 그 마음 알지, 무슨 말인지 이해해",
-            example: "I hear you, it has been an exhausting week."
-          },
-          {
-            phrase: "kick in",
-            meaning: "(카페인, 약효 등이) 돌기 시작하다, 효과를 내다",
-            example: "The painkiller should kick in about 20 minutes from now."
-          },
-          {
-            phrase: "pull oneself together",
-            meaning: "정신을 차리다, 마음을 가다듬다",
-            example: "Take a deep breath and pull yourself together."
-          }
+          { phrase: "wrap up ~", meaning: "어떤 일이나 미팅을 잘 마무리 짓다", example: "Let's wrap up this meeting before noon." },
+          { phrase: "I hear you.", meaning: "(격한 공감) 그 마음 알지, 무슨 말인지 이해해", example: "I hear you, it has been an exhausting week." },
+          { phrase: "kick in", meaning: "(카페인, 약효 등이) 돌기 시작하다", example: "The morning espresso is finally starting to kick in." }
         ],
         quizzes: [
-          {
-            question: "동료의 힘든 사정에 '완전 공감해, 그 마음 알지'라고 맞장구칠 때:",
-            prompt: "____ ____ ____. I feel the exact same way.",
-            answers: ["I hear you", "i hear you"],
-            hint: "hear(듣다)가 들어가는 3단어"
-          },
-          {
-            question: "커피나 피로회복제 효과가 '아직 돌지 않았다'고 표현할 때:",
-            prompt: "My morning coffee hasn't fully ____ ____ yet.",
-            answers: ["kicked in", "kick in"],
-            hint: "kick + 전치사"
-          },
-          {
-            question: "나태해지거나 당황했을 때 '정신 바짝 차리자'고 다짐할 때:",
-            prompt: "I need to take a deep breath and ____ ____ ____.",
-            answers: ["pull myself together", "pull yourself together"],
-            hint: "pull + myself + together"
-          }
+          { question: "상대방의 힘든 상황에 '완전 공감해, 그 마음 알지'라고 할 때:", prompt: "____ ____ ____. I feel the exact same way.", answers: ["I hear you", "i hear you"], hint: "hear(듣다) 관련 3단어" },
+          { question: "커피나 피로회복제 효과가 '아직 돌지 않았다'고 할 때:", prompt: "My morning coffee hasn't fully ____ ____ yet.", answers: ["kicked in", "kick in"], hint: "kick + 전치사" }
         ]
       },
       {
         id: "day2",
-        dayNum: "Day 2",
-        category: "Evening & Weekend Plans",
-        title: "Calling It a Day",
+        dayNum: 2,
+        category: "Wrapping Up",
+        title: "Calling It a Day & Weekend Plans",
         subtitle: "퇴근길 엘리베이터 앞에서 가볍게 주말 계획을 나눌 때",
         dialogues: [
-          {
-            speaker: "A",
-            name: "Alex",
-            text: "Are you calling it a day already?",
-            ipa: "[ɑːr juː ˈkɔːlɪŋ ɪt ə deɪ ɔːlˈredi]",
-            linking: "calling it a는 끊김 없이 [콜링-이-러]로 부드럽게 세 단어가 하나로 이어집니다.",
-            trans: "벌써 퇴근하시는 거예요?"
-          },
-          {
-            speaker: "B",
-            name: "Sam",
-            text: "Yeah, I've got a busy weekend ahead, so I'm trying to beat the traffic.",
-            ipa: "[jeə, aɪv ɡɑːt ə ˈbɪzi ˈwiːkend əˈhed, soʊ aɪm ˈtraɪɪŋ tuː biːt ðə ˈtræfɪk]",
-            linking: "I've got a는 [아이브 가러], traffic의 tr은 혀가 닿으며 [츄래픽]에 가깝게 발음됩니다.",
-            trans: "네, 이번 주말에 일정이 빡빡해서 차 막히기 전에 가보려고요."
-          },
-          {
-            speaker: "A",
-            name: "Alex",
-            text: "Nice. Any big plans for the weekend?",
-            ipa: "[naɪs. ˈeni bɪɡ plænz fər ðə ˈwiːkend]",
-            linking: "for the는 아주 약하게 [퍼-더]로 휙 지나가고 weekend에 힘을 줍니다.",
-            trans: "좋네요. 주말에 뭐 특별한 계획 있으세요?"
-          },
-          {
-            speaker: "B",
-            name: "Sam",
-            text: "Nothing special, just catching up on some sleep and running a few errands. How about you?",
-            ipa: "[ˈnʌθɪŋ ˈspeʃl, dʒʌst ˈkætʃɪŋ ʌp ɑːn səm sliːp ənd ˈrʌnɪŋ ə fjuː ˈerəndz. haʊ əˈbaʊt juː]",
-            linking: "catching up on은 [캐칭-어-판]으로 연음되고, errands는 [에-런즈]로 가볍게 발음합니다.",
-            trans: "특별한 건 없고, 밀린 잠 좀 자고 볼일 몇 개 보려고요. 그쪽은요?"
-          },
-          {
-            speaker: "A",
-            name: "Alex",
-            text: "I'm just planning to kick back and binge-watch a new series.",
-            ipa: "[aɪm dʒʌst ˈplænɪŋ tuː kɪk bæk ənd ˈbɪndʒ wɑːtʃ ə nuː ˈsɪriːz]",
-            linking: "kick back은 첫 k에서 숨을 살짝 멈췄다 풀고, binge-watch는 [빈-쥐-왓-취]로 끊김 없이 이어집니다.",
-            trans: "저는 그냥 집에서 편하게 쉬면서 새로 나온 시리즈나 정주행하려고요."
-          },
-          {
-            speaker: "B",
-            name: "Sam",
-            text: "Sounds like the perfect way to unwind. Have a good one!",
-            ipa: "[saʊndz laɪk ðə ˈpɜːrfɪkt weɪ tuː ʌnˈwaɪnd. hæv ə ɡʊd wʌn]",
-            linking: "Have a good one은 [해-버 구-드원]처럼 세 단어를 하나의 덩어리로 툭 뱉어냅니다.",
-            trans: "피로 풀기 딱 좋네요. 주말 잘 보내세요!"
-          }
+          { speaker: "A", name: "Alex", text: "Are you calling it a day already?", ipa: "[ɑːr juː ˈkɔːlɪŋ ɪt ə deɪ ɔːlˈredi]", linking: "calling it a는 끊김 없이 [콜링-이-러]로 부드럽게 연결됩니다.", trans: "벌써 퇴근하시는 거예요?" },
+          { speaker: "B", name: "Sam", text: "Yeah, I've got a busy weekend ahead, so I'm trying to beat the traffic.", ipa: "[jeə, aɪv ɡɑːt ə ˈbɪzi ˈwiːkend əˈhed, soʊ aɪm ˈtraɪɪŋ tuː biːt ðə ˈtræfɪk]", linking: "I've got a는 [아이브 가러], traffic의 tr은 [츄래픽]에 가깝습니다.", trans: "네, 이번 주말에 일정이 빡빡해서 차 막히기 전에 가보려고요." },
+          { speaker: "A", name: "Alex", text: "Nice. Any big plans for the weekend?", ipa: "[naɪs. ˈeni bɪɡ plænz fər ðə ˈwiːkend]", linking: "for the는 아주 약하게 [퍼-더]로 휙 넘어갑니다.", trans: "좋네요. 주말에 뭐 특별한 계획 있으세요?" },
+          { speaker: "B", name: "Sam", text: "Nothing special, just catching up on some sleep and running a few errands. How about you?", ipa: "[ˈnʌθɪŋ ˈspeʃl, dʒʌst ˈkætʃɪŋ ʌp ɑːn səm sliːp ənd ˈrʌnɪŋ ə fjuː ˈerəndz. haʊ əˈbaʊt juː]", linking: "catching up on은 [캐칭-어-판], errands는 [에-런즈]로 발음합니다.", trans: "특별한 건 없고, 밀린 잠 좀 자고 볼일 몇 개 보려고요. 그쪽은요?" },
+          { speaker: "A", name: "Alex", text: "I'm just planning to kick back and binge-watch a new series.", ipa: "[aɪm dʒʌst ˈplænɪŋ tuː kɪk bæk ənd ˈbɪndʒ wɑːtʃ ə nuː ˈsɪriːz]", linking: "binge-watch는 [빈-쥐-왓-취]로 끊김 없이 이어집니다.", trans: "저는 그냥 집에서 편하게 쉬면서 새로 나온 시리즈나 정주행하려고요." },
+          { speaker: "B", name: "Sam", text: "Sounds like the perfect way to unwind. Have a good one!", ipa: "[saʊndz laɪk ðə ˈpɜːrfɪkt weɪ tuː ʌnˈwaɪnd. hæv ə ɡʊd wʌn]", linking: "Have a good one은 [해-버 구-드원]처럼 한 덩어리로 발음합니다.", trans: "피로 풀기 딱 좋네요. 주말 잘 보내세요!" }
         ],
         expressions: [
-          {
-            phrase: "call it a day",
-            meaning: "그날의 일이나 업무를 마무리하고 퇴근하다",
-            example: "It's past 7 PM, let's call it a day."
-          },
-          {
-            phrase: "beat the traffic",
-            meaning: "교통 체증(러시아워)을 피하다, 차 밀리기 전에 가다",
-            example: "We left early in the morning to beat the holiday traffic."
-          },
-          {
-            phrase: "run errands",
-            meaning: "(장보기, 은행 등) 일상적인 자잘한 볼일을 보다",
-            example: "I spent my Saturday morning running errands."
-          },
-          {
-            phrase: "unwind",
-            meaning: "(태엽 풀리듯) 피로와 긴장을 풀고 쉬다",
-            example: "Listening to acoustic music helps me unwind after work."
-          }
+          { phrase: "call it a day", meaning: "그날의 일과를 마치고 퇴근하다", example: "Let's call it a day and grab some dinner." },
+          { phrase: "beat the traffic", meaning: "교통 체증(러시아워)을 피하다", example: "We left early to beat the Friday evening traffic." },
+          { phrase: "unwind", meaning: "긴장을 풀고 편히 쉬다", example: "A warm bath is a great way to unwind." }
         ],
         quizzes: [
-          {
-            question: "오늘 업무를 여기서 마치고 퇴근하자는 말을 하고 싶을 때:",
-            prompt: "It's getting late. Let's ____ ____ ____ ____.",
-            answers: ["call it a day"],
-            hint: "call + it + a + day"
-          },
-          {
-            question: "러시아워 차 막히는 시간을 피해서 일찍 떠난다고 할 때:",
-            prompt: "I'm leaving now to ____ ____ ____.",
-            answers: ["beat the traffic"],
-            hint: "beat + the + traffic"
-          },
-          {
-            question: "주말에 장보기나 세탁소 등 자잘한 볼일을 본다고 할 때:",
-            prompt: "I need to spend this afternoon ____ ____.",
-            answers: ["running errands", "run errands"],
-            hint: "errands(볼일)와 어울리는 동사"
-          }
+          { question: "오늘 업무를 여기서 마무리하고 퇴근하자는 말을 할 때:", prompt: "It's past 7 PM. Let's ____ ____ ____ ____.", answers: ["call it a day"], hint: "call + it + a + day" },
+          { question: "차 막히는 퇴근 시간을 피해서 일찍 떠난다고 할 때:", prompt: "I'm heading out now to ____ ____ ____.", answers: ["beat the traffic"], hint: "beat + the + traffic" }
         ]
       },
       {
         id: "day3",
-        dayNum: "Day 3",
-        category: "Agile Project Sync",
-        title: "Checking In on Project Deadlines",
+        dayNum: 3,
+        category: "Project Sync",
+        title: "Checking In on Deliverables",
         subtitle: "동료와 진행 중인 프로젝트 일정과 우선순위를 조율할 때",
         dialogues: [
-          {
-            speaker: "A",
-            name: "Chris",
-            text: "Hey, do you have a quick minute to touch base on the client presentation?",
-            ipa: "[heɪ, duː juː hæv ə kwɪk ˈmɪnɪt tuː tʌtʃ beɪs ɑːn ðə ˈklaɪənt ˌpreznˈteɪʃn]",
-            linking: "have a는 [해-버], touch base on은 base와 on이 이어져 [베이스-안]으로 부드럽게 연결됩니다.",
-            trans: "저기, 클라이언트 발표 자료 관련해서 잠깐 얘기 나눌 시간 있나요?"
-          },
-          {
-            speaker: "B",
-            name: "Taylor",
-            text: "Sure! I'm on track with the slides, but I might need your input on the budget slide.",
-            ipa: "[ʃʊr! aɪm ɑːn træk wɪð ðə slaɪdz, bʌt aɪ maɪt niːd jɔːr ˈɪnpʊt ɑːn ðə ˈbʌdʒɪt slaɪd]",
-            linking: "I'm on은 [아이-만], need your는 d와 y가 만나 [니-쥬어], input on은 [인-푸-탄]으로 이어집니다.",
-            trans: "그럼요! 슬라이드는 일정대로 잘 진행되고 있는데, 예산 슬라이드에 조언(피드백)이 좀 필요할 것 같아요."
-          },
-          {
-            speaker: "A",
-            name: "Chris",
-            text: "No problem at all. Are we still good to wrap everything up by tomorrow afternoon?",
-            ipa: "[noʊ ˈprɑːbləm ət ɔːl. ɑːr wiː stɪl ɡʊd tuː ræp ˈevriθɪŋ ʌp baɪ təˈmɔːroʊ ˌæftərˈnuːn]",
-            linking: "at all은 [애-톨], wrap everything up은 p와 u가 만나 [래-페브리씽-업]으로 한 덩어리로 흐릅니다.",
-            trans: "문제없죠. 내일 오후까지는 전부 마무리할 수 있는 상태인 거죠?"
-          },
-          {
-            speaker: "B",
-            name: "Taylor",
-            text: "As long as we don't hit any unexpected roadblocks, we should be fine.",
-            ipa: "[æz lɔːŋ æz wiː doʊnt hɪt ˈeni ˌʌnɪkˈspektɪd ˈroʊdblæks, wiː ʃʊd biː faɪn]",
-            linking: "hit any는 t가 모음 사이에서 굴러가 [히-레니]처럼 플랩(flap) 사운드로 발음됩니다.",
-            trans: "예상치 못한 걸림돌만 없다면 충분히 맞출 수 있을 거예요."
-          },
-          {
-            speaker: "A",
-            name: "Chris",
-            text: "Great. Shoot me an email with the current draft, and I'll look it over.",
-            ipa: "[ɡreɪt. ʃuːt miː ən ˈiːmeɪl wɪð ðə ˈkɜːrənt dræft, ənd aɪl lʊk ɪt ˈoʊvər]",
-            linking: "look it over는 세 단어가 연음되어 [루-키-도-버]처럼 한 호흡으로 굴러갑니다.",
-            trans: "좋습니다. 지금 작성된 초안 이메일로 쏴주시면 제가 훑어볼게요."
-          },
-          {
-            speaker: "B",
-            name: "Taylor",
-            text: "Will do. Thanks for following up on this so quickly!",
-            ipa: "[wɪl duː. θæŋks fər ˈfɑːloʊɪŋ ʌp ɑːn ðɪs soʊ ˈkwɪkli]",
-            linking: "following up on은 [팔로잉-어-판]으로 p와 on이 자연스럽게 붙습니다.",
-            trans: "바로 보낼게요. 빠르게 챙겨봐 줘서 고마워요!"
-          }
+          { speaker: "A", name: "Chris", text: "Hey, do you have a quick minute to touch base on the client presentation?", ipa: "[heɪ, duː juː hæv ə kwɪk ˈmɪnɪt tuː tʌtʃ beɪs ɑːn ðə ˈklaɪənt ˌpreznˈteɪʃn]", linking: "have a는 [해-버], touch base on은 [베이스-안]으로 이어집니다.", trans: "저기, 클라이언트 발표 자료 관련해서 잠깐 얘기 나눌 시간 있나요?" },
+          { speaker: "B", name: "Taylor", text: "Sure! I'm on track with the slides, but I might need your input on the budget slide.", ipa: "[ʃʊr! aɪm ɑːn træk wɪð ðə slaɪdz, bʌt aɪ maɪt niːd jɔːr ˈɪnpʊt ɑːn ðə ˈbʌdʒɪt slaɪd]", linking: "I'm on은 [아이-만], need your는 [니-쥬어]로 연음됩니다.", trans: "그럼요! 슬라이드는 일정대로 잘 진행되고 있는데, 예산 슬라이드에 피드백이 좀 필요해요." },
+          { speaker: "A", name: "Chris", text: "No problem at all. Are we still good to wrap everything up by tomorrow afternoon?", ipa: "[noʊ ˈprɑːbləm ət ɔːl. ɑːr wiː stɪl ɡʊd tuː ræp ˈevriθɪŋ ʌp baɪ təˈmɔːroʊ ˌæftərˈnuːn]", linking: "at all은 [애-톨], wrap everything up은 [래-페브리씽-업]으로 흐릅니다.", trans: "문제없죠. 내일 오후까지는 전부 마무리할 수 있는 상태인 거죠?" },
+          { speaker: "B", name: "Taylor", text: "As long as we don't hit any unexpected roadblocks, we should be fine.", ipa: "[æz lɔːŋ æz wiː doʊnt hɪt ˈeni ˌʌnɪkˈspektɪd ˈroʊdblæks, wiː ʃʊd biː faɪn]", linking: "hit any는 t가 부드러워져 [히-레니]로 굴러갑니다.", trans: "예상치 못한 걸림돌만 없다면 충분히 맞출 수 있을 거예요." },
+          { speaker: "A", name: "Chris", text: "Great. Shoot me an email with the current draft, and I'll look it over.", ipa: "[ɡreɪt. ʃuːt miː ən ˈiːmeɪl wɪð ðə ˈkɜːrənt dræft, ənd aɪl lʊk ɪt ˈoʊvər]", linking: "look it over는 세 단어가 붙어 [루-키-도-버]로 연음됩니다.", trans: "좋습니다. 지금 작성된 초안 메일로 쏴주시면 제가 훑어볼게요." },
+          { speaker: "B", name: "Taylor", text: "Will do. Thanks for following up on this so quickly!", ipa: "[wɪl duː. θæŋks fər ˈfɑːloʊɪŋ ʌp ɑːn ðɪs soʊ ˈkwɪkli]", linking: "following up on은 [팔로잉-어-판]으로 이어집니다.", trans: "바로 보낼게요. 빠르게 챙겨봐 줘서 고마워요!" }
         ],
         expressions: [
-          {
-            phrase: "touch base",
-            meaning: "(상황, 진척을 공유하기 위해) 잠깐 이야기를 나누다",
-            example: "Let's touch base first thing tomorrow morning."
-          },
-          {
-            phrase: "on track",
-            meaning: "일정이나 계획대로 순조롭게 진행 중인",
-            example: "The project timeline is right on track."
-          },
-          {
-            phrase: "hit a roadblock",
-            meaning: "(예기치 않은) 걸림돌, 난관에 부딪히다",
-            example: "We hit a roadblock with the API integration."
-          },
-          {
-            phrase: "look something over",
-            meaning: "~을 검토하다, 빠르게 훑어보다",
-            example: "Could you look over my proposal before I send it?"
-          }
+          { phrase: "touch base", meaning: "(진척 상황을 위해) 간단히 이야기를 나누다", example: "Let's touch base first thing on Monday." },
+          { phrase: "on track", meaning: "일정이나 계획대로 순조롭게 진행 중인", example: "The project timeline is right on track." },
+          { phrase: "look something over", meaning: "~을 검토하다, 가볍게 훑어보다", example: "Could you look over my proposal before I send it?" }
         ],
         quizzes: [
-          {
-            question: "상대방과 진행 상황에 대해 '잠깐 이야기 좀 나누자'고 제안할 때:",
-            prompt: "Do you have a minute to ____ ____ on the sprint?",
-            answers: ["touch base"],
-            hint: "touch + base"
-          },
-          {
-            question: "프로젝트가 차질 없이 '순조롭게 일정대로 진행 중'이라고 말할 때:",
-            prompt: "Don't worry, the release is right ____ ____.",
-            answers: ["on track"],
-            hint: "on + track"
-          },
-          {
-            question: "보고서나 초안을 '가볍게 훑어보고 검토해 주다'라고 할 때:",
-            prompt: "I'll ____ ____ your draft this afternoon.",
-            answers: ["look over"],
-            hint: "look + over"
-          }
+          { question: "상대방에게 '잠깐 이야기 좀 나누자'고 제안할 때:", prompt: "Do you have a minute to ____ ____ on the sprint?", answers: ["touch base"], hint: "touch + base" },
+          { question: "프로젝트가 차질 없이 '일정대로 진행 중'이라고 할 때:", prompt: "Don't worry, the release is right ____ ____.", answers: ["on track"], hint: "on + track" }
+        ]
+      },
+      {
+        id: "day4",
+        dayNum: 4,
+        category: "Lunch Talk",
+        title: "Grabbing a Quick Bite",
+        subtitle: "점심시간 메뉴를 고르고 동료들과 식사하러 나갈 때",
+        dialogues: [
+          { speaker: "A", name: "Jordan", text: "Hey guys, are you up for grabbing some lunch?", ipa: "[heɪ ɡaɪz, ɑːr juː ʌp fər ˈɡræbɪŋ səm lʌntʃ]", linking: "up for는 [업-퍼], grabbing some은 [그래빙-썸]으로 이어집니다.", trans: "여러분, 다들 점심 먹으러 갈 생각 있어요?" },
+          { speaker: "B", name: "Morgan", text: "Count me in! I've been craving something spicy all morning.", ipa: "[kaʊnt miː ɪn! aɪv biːn ˈkreɪvɪŋ ˈsʌmθɪŋ ˈspaɪsi ɔːl ˈmɔːrnɪŋ]", linking: "Count me in은 [카운트-미-인], all morning은 [올-모닝]으로 발음합니다.", trans: "나도 껴줘요! 아침 내내 매콤한 게 엄청 당겼거든요." },
+          { speaker: "A", name: "Jordan", text: "How about that new Thai place around the corner?", ipa: "[haʊ əˈbaʊt ðæt nuː taɪ pleɪs əˈraʊnd ðə ˈkɔːrnər]", linking: "around the는 [어라운-더]처럼 d가 약화됩니다.", trans: "모퉁이 돌아 새로 생긴 태국 음식점 어때요?" },
+          { speaker: "B", name: "Morgan", text: "I'm down for that. Does it usually get packed around this hour?", ipa: "[aɪm daʊn fər ðæt. dʌz ɪt ˈjuːʒuəli ɡet pækt əˈraʊnd ðɪs ˈaʊər]", linking: "down for는 [다운-퍼], get packed는 [겟-팩트]로 발음합니다.", trans: "완전 좋죠. 이 시간대에 사람 많이 붐비나요?" },
+          { speaker: "A", name: "Jordan", text: "If we leave right now, we can probably beat the rush.", ipa: "[ɪf wiː liːv raɪt naʊ, wiː kən ˈprɑːbəbli biːt ðə rʌʃ]", linking: "right now는 [라잇-나우], beat the는 [비-더]로 부드럽게 연결됩니다.", trans: "지금 바로 출발하면 점심 인파 몰리기 전에 들어갈 수 있을 거예요." },
+          { speaker: "B", name: "Morgan", text: "Awesome, let me grab my coat and I'll meet you at the elevators.", ipa: "[ˈɔːsəm, let miː ɡræb maɪ koʊt ənd aɪl miːt juː ət ðə ˈelɪveɪtərz]", linking: "meet you at은 [미-츄-앳]으로 자연스럽게 연음됩니다.", trans: "좋아요, 코트 챙겨서 엘리베이터 앞에서 만나요." }
+        ],
+        expressions: [
+          { phrase: "grab a bite", meaning: "간단히 요기하다, 밥 먹으러 가다", example: "Let's grab a quick bite before the store closes." },
+          { phrase: "Count me in.", meaning: "나도 껴줘, 나도 참석할게", example: "If you guys are going for coffee, count me in!" },
+          { phrase: "I'm down for ~", meaning: "나도 찬성해, 완전 좋아", example: "I'm down for pizza tonight." }
+        ],
+        quizzes: [
+          { question: "점심이나 모임에 '나도 껴줘!'라고 합류할 때:", prompt: "That sounds fun! ____ ____ ____.", answers: ["Count me in", "count me in"], hint: "count + me + in" },
+          { question: "어떤 메뉴나 제안에 '완전 찬성/좋아'라고 할 때:", prompt: "I'm ____ ____ grabbing Thai food.", answers: ["down for"], hint: "down + for" }
+        ]
+      },
+      {
+        id: "day5",
+        dayNum: 5,
+        category: "Asking for Favor",
+        title: "Could You Do Me a Solid?",
+        subtitle: "바쁜 업무 중 동료에게 정중히 도움을 청할 때",
+        dialogues: [
+          { speaker: "A", name: "David", text: "Hey Rachel, do you have a second? I could really use a favor.", ipa: "[heɪ ˈreɪtʃl, duː juː hæv ə ˈsekənd? aɪ kʊd ˈriːəli juːz ə ˈfeɪvər]", linking: "have a는 [해-버], use a favor는 [유-저 페이버]로 연음됩니다.", trans: "레이철, 잠깐 시간 돼요? 부탁 하나만 드려도 될까요." },
+          { speaker: "B", name: "Rachel", text: "Sure thing, David. What's on your mind?", ipa: "[ʃʊr θɪŋ, ˈdeɪvɪd. wɑːts ɑːn jɔːr maɪnd]", linking: "What's on은 [왓-싼]으로 부드럽게 붙습니다.", trans: "그럼요, 데이비드. 무슨 일인데요?" },
+          { speaker: "A", name: "David", text: "I'm tied up with an urgent bug fix. Could you cover for me at the 2 PM sync?", ipa: "[aɪm taɪd ʌp wɪð ən ˈɜːrdʒənt bʌɡ fɪks. kʊd juː ˈkʌvər fər miː ət ðə tuː piː em sɪŋk]", linking: "tied up with는 [타이-덥-위드], could you는 [쿠-쥬]로 발음합니다.", trans: "급한 버그 수정에 발이 묶여서요. 2시 싱크 회의에 제 대신 들어가 주실 수 있나요?" },
+          { speaker: "B", name: "Rachel", text: "I'd be glad to. Do you have any specific updates I should share?", ipa: "[aɪd biː ɡlæd tuː. duː juː hæv ˈeni spəˈsɪfɪk ˈʌpdeɪts aɪ ʃʊd ʃer]", linking: "glad to는 [글래-투], have any는 [해-베니]로 연음됩니다.", trans: "기꺼이 해드리죠. 제가 공유해야 할 특정 진행 상황이 있나요?" },
+          { speaker: "A", name: "David", text: "Just let them know Phase 1 is done. I really owe you one for this!", ipa: "[dʒʌst let ðəm noʊ feɪz wʌn ɪz dʌn. aɪ ˈriːəli oʊ juː wʌn fər ðɪs]", linking: "let them은 [렛-덤], owe you one은 [오-유-원]으로 뱉습니다.", trans: "1단계 완료됐다고만 알려주세요. 이번 신세는 꼭 갚을게요!" },
+          { speaker: "B", name: "Rachel", text: "Don't mention it. That's what teammates are for.", ipa: "[doʊnt ˈmenʃn ɪt. ðæts wɑːt ˈtiːmmeɪts ɑːr fər]", linking: "mention it은 [멘-셔-닛], that's what은 [댓-쫘]에 가깝게 흐릅니다.", trans: "별말씀을요. 팀원이 괜히 있는 게 아니잖아요." }
+        ],
+        expressions: [
+          { phrase: "tied up with ~", meaning: "~에 얽매여 꼼짝달싹 못 하는, 매우 바쁜", example: "I was tied up with phone calls all morning." },
+          { phrase: "cover for someone", meaning: "누군가의 자리를 대신 채워주다/대타를 뛰다", example: "Can you cover for me while I'm at the dentist?" },
+          { phrase: "I owe you one.", meaning: "신세 한번 졌네, 꼭 은혜 갚을게", example: "Thanks for helping me move, I owe you one!" }
+        ],
+        quizzes: [
+          { question: "다른 일 때문에 '발이 묶여 꼼짝 못 한다'고 할 때:", prompt: "I am completely ____ ____ with urgent tasks.", answers: ["tied up"], hint: "tied + up" },
+          { question: "도움을 받고 '신세 꼭 갚을게'라고 감사할 때:", prompt: "Thanks a lot! I really ____ ____ ____.", answers: ["owe you one"], hint: "owe + you + one" }
+        ]
+      },
+      {
+        id: "day6",
+        dayNum: 6,
+        category: "Feedback & Review",
+        title: "Giving Feedback on a Pitch Deck",
+        subtitle: "동료의 발표 자료 초안을 검토하고 건설적인 피드백을 줄 때",
+        dialogues: [
+          { speaker: "A", name: "Lisa", text: "Thanks for looking over my pitch deck on such short notice.", ipa: "[θæŋks fər ˈlʊkɪŋ ˈoʊvər maɪ pɪtʃ dek ɑːn sʌtʃ ʃɔːrt ˈnoʊtɪs]", linking: "looking over는 [루킹-오버], short notice는 [숏-노티스]로 발음합니다.", trans: "촉박한 부탁이었는데 제 발표 슬라이드 검토해 줘서 고마워요." },
+          { speaker: "B", name: "Ethan", text: "Of course! Overall, the flow is super solid and easy to follow.", ipa: "[əv kɔːrs! ˌoʊvərˈɔːl, ðə floʊ ɪz ˈsuːpər ˈsɑːlɪd ənd ˈiːzi tuː ˈfɑːloʊ]", linking: "flow is는 [플로우-이즈], easy to는 [이지-투]로 연결됩니다.", trans: "별말씀을요! 전체적으로 흐름이 아주 탄탄하고 따라가기 쉬웠어요." },
+          { speaker: "A", name: "Lisa", text: "Is there anything that felt a little unclear or redundant?", ipa: "[ɪz ðer ˈeniθɪŋ ðæt felt ə ˈlɪtl ʌnˈklɪr ɔːr rɪˈdʌndənt]", linking: "felt a는 [펠-터], little unclear는 [리-를-언클리어]로 연음됩니다.", trans: "혹시 조금 불명확하거나 중복된다고 느껴진 부분은 없었나요?" },
+          { speaker: "B", name: "Ethan", text: "Slide 5 has quite a bit of text. Maybe break it down into bullet points?", ipa: "[slaɪd faɪv hæz kwaɪt ə bɪt əv tekst. ˈmeɪbi breɪk ɪt daʊn ˈɪntuː ˈbʊlɪt pɔɪnts]", linking: "bit of text는 [비-러브-텍스트], break it down은 [브레이-킷-다운]으로 연음됩니다.", trans: "5번 슬라이드에 텍스트가 좀 많아요. 항목별 불릿 기호로 쪼개는 건 어떨까요?" },
+          { speaker: "A", name: "Lisa", text: "Good catch. I was worried it might look a little cluttered.", ipa: "[ɡʊd kætʃ. aɪ wəz ˈwɜːrid ɪt maɪt lʊk ə ˈlɪtl ˈklʌtərd]", linking: "Good catch는 [굿-캐치], look a little은 [루-커-리를]로 이어집니다.", trans: "잘 짚어주셨네요. 너무 조잡해 보이지 않을까 걱정했거든요." },
+          { speaker: "B", name: "Ethan", text: "Other than that, it's ready to go. You're going to crush it!", ipa: "[ˈʌðər ðən ðæt, ɪts ˈredi tuː ɡoʊ. jʊr ˈɡoʊɪŋ tuː krʌʃ ɪt]", linking: "Other than that은 [어더-댄-댓], crush it은 [크러-쉿]으로 소리 납니다.", trans: "그것 빼고는 준비 완료입니다. 발표 완전 대박 날 거예요!" }
+        ],
+        expressions: [
+          { phrase: "on short notice", meaning: "촉박한 시간에, 갑작스러운 요청에도 불구하고", example: "Thank you for joining this call on short notice." },
+          { phrase: "Good catch.", meaning: "잘 짚어냈다, 날카로운 지적이다", example: "Good catch! I almost submitted the wrong invoice." },
+          { phrase: "crush it", meaning: "완전 잘 해내다, 대박을 터뜨리다", example: "You prepared so hard, you will definitely crush it!" }
+        ],
+        quizzes: [
+          { question: "상대방이 날카롭게 오류나 개선점을 발견했을 때:", prompt: "____ ____! I didn't see that typo at all.", answers: ["Good catch", "good catch"], hint: "good + catch" },
+          { question: "발표나 면접을 앞둔 사람에게 '완전 박살 내버려(잘해!)':", prompt: "Go out there and ____ ____!", answers: ["crush it"], hint: "crush + it" }
+        ]
+      },
+      {
+        id: "day7",
+        dayNum: 7,
+        category: "Tech & Troubleshooting",
+        title: "Dealing with a Production Bug",
+        subtitle: "시스템 에러나 배포 이슈가 발생해 팀원과 해결책을 모색할 때",
+        dialogues: [
+          { speaker: "A", name: "Kevin", text: "Did you see the spike in error rates after the recent deployment?", ipa: "[dɪd juː siː ðə spaɪk ɪn ˈerər reɪts ˈæftər ðə ˈriːsnt dɪˈplɔɪmənt]", linking: "Did you see는 [디-쥬-씨], spike in은 [스파이-킨]으로 이어집니다.", trans: "최근 배포 이후에 에러 발생률 급증한 거 확인하셨어요?" },
+          { speaker: "B", name: "Elena", text: "Yeah, I'm currently looking into the server logs right now.", ipa: "[jeə, aɪm ˈkɜːrəntli ˈlʊkɪŋ ˈɪntuː ðə ˈsɜːrvər lɔːɡz raɪt naʊ]", linking: "looking into는 [루킹-인투], right now는 [라잇-나우]입니다.", trans: "네, 지금 실시간으로 서버 로그 파헤쳐 보고 있어요." },
+          { speaker: "A", name: "Kevin", text: "Any idea what's causing the bottleneck?", ipa: "[ˈeni aɪˈdiːə wɑːts ˈkɔːzɪŋ ðə ˈbɑːtlnek]", linking: "Any idea는 [애니-아이디어], what's causing은 [왓츠-코징]으로 이어집니다.", trans: "어디서 병목 현상이 생기는지 감이 좀 잡히나요?" },
+          { speaker: "B", name: "Elena", text: "It looks like a caching issue triggered by the database migration.", ipa: "[ɪt lʊks laɪk ə ˈkæʃɪŋ ˈɪʃuː ˈtrɪɡərd baɪ ðə ˈdeɪtəbeɪs maɪˈɡreɪʃn]", linking: "looks like a는 [룩스-라이-커]로 연음됩니다.", trans: "데이터베이스 이전 작업 때문에 캐싱 쪽에서 문제가 터진 것 같아요." },
+          { speaker: "A", name: "Kevin", text: "Should we roll back the release or deploy a hotfix?", ipa: "[ʃʊd wiː roʊl bæk ðə rɪˈliːs ɔːr dɪˈplɔɪ ə ˈhɑːtfɪks]", linking: "roll back은 [롤-백], deploy a는 [디플로이-어]로 이어집니다.", trans: "배포를 롤백(이전 버전 회귀)해야 할까요, 아니면 핫픽스를 띄울까요?" },
+          { speaker: "B", name: "Elena", text: "A quick patch should do the trick. I'll push it to staging first.", ipa: "[ə kwɪk pætʃ ʃʊd duː ðə trɪk. aɪl pʊʃ ɪt tuː ˈsteɪdʒɪŋ fɜːrst]", linking: "do the trick은 [두-더-트릭], push it은 [푸-쉿]으로 소리 납니다.", trans: "간단한 패치 하나면 해결될 것 같아요. 스테이징 서버에 먼저 올려볼게요." }
+        ],
+        expressions: [
+          { phrase: "look into ~", meaning: "어떤 문제를 조사하다, 살펴보다", example: "We will look into this issue immediately." },
+          { phrase: "bottleneck", meaning: "(공정이나 시스템의) 병목 구간, 지체 요인", example: "Customer support has become the main bottleneck." },
+          { phrase: "do the trick", meaning: "(해결책 등이) 효과가 있다, 딱 들어맞다", example: "A simple reboot will usually do the trick." }
+        ],
+        quizzes: [
+          { question: "어떤 문제가 발생해 '자세히 조사해 보겠다'고 할 때:", prompt: "I will ____ ____ the logs and update you.", answers: ["look into"], hint: "look + into" },
+          { question: "이 방법이면 '문제가 해결될/효과가 있을 것'이라고 할 때:", prompt: "This quick workaround should ____ ____ ____.", answers: ["do the trick"], hint: "do + the + trick" }
+        ]
+      },
+      {
+        id: "day8",
+        dayNum: 8,
+        category: "Scheduling & Deadlines",
+        title: "Pushing Back a Delivery Deadline",
+        subtitle: "예상보다 작업이 지연되어 마감일 연기를 정중하게 요청할 때",
+        dialogues: [
+          { speaker: "A", name: "Mark", text: "Do you have a moment to discuss the Q3 roadmap timeline?", ipa: "[duː juː hæv ə ˈmoʊmənt tuː dɪˈskʌs ðə kjuː θriː ˈroʊdmæp ˈtaɪmlaɪn]", linking: "have a moment는 [해-버 모우먼트]로 부드럽게 붙습니다.", trans: "3분기 로드맵 일정 관련해서 잠깐 이야기 나눌 수 있을까요?" },
+          { speaker: "B", name: "Sarah", text: "Sure, Mark. Are we running behind schedule on anything?", ipa: "[ʃʊr, mɑːrk. ɑːr wiː ˈrʌnɪŋ bɪˈhaɪnd ˈskedʒuːl ɑːn ˈeniθɪŋ]", linking: "running behind는 [러닝-비하인드], behind schedule은 [비하인-스케줄]로 연음됩니다.", trans: "네 마크. 혹시 일정보다 늦어지는 항목이 있나요?" },
+          { speaker: "A", name: "Mark", text: "Unfortunately, the third-party API integration is taking longer than expected.", ipa: "[ʌnˈfɔːrtʃənətli, ðə θɜːrd ˈpɑːrti ˌeɪ piː ˈaɪ ˌɪntɪˈɡreɪʃn ɪz ˈteɪkɪŋ ˈlɔːŋɡər ðən ɪkˈspektɪd]", linking: "integration is는 [인티그레이셔-니즈], longer than은 [롱거-댄]입니다.", trans: "안타깝게도 외부 API 연동 작업이 예상보다 시간이 더 걸리고 있어요." },
+          { speaker: "B", name: "Sarah", text: "I see. How much of a buffer do you think we will need?", ipa: "[aɪ siː. haʊ mʌtʃ əv ə ˈbʌfər duː juː θɪŋk wiː wɪl niːd]", linking: "much of a는 [머-처-버], buffer do는 [버퍼-두]로 연결됩니다.", trans: "그렇군요. 완충 기간(여유 일정)이 얼마나 더 필요할 것 같나요?" },
+          { speaker: "A", name: "Mark", text: "Would it be possible to push the deadline back by two days?", ipa: "[wʊd ɪt biː ˈpɑːsəbl tuː pʊʃ ðə ˈdedlaɪn bæk baɪ tuː deɪz]", linking: "Would it be는 d와 it이 만나 [우-디-비]로 소리 납니다.", trans: "마감일을 이틀 정도만 뒤로 미루는 게 가능할까요?" },
+          { speaker: "B", name: "Sarah", text: "That should be manageable. Let's make sure quality isn't compromised.", ipa: "[ðæt ʃʊd biː ˈmænɪdʒəbl. lets meɪk ʃʊr ˈkwɑːləti ˈɪznt ˈkɑːmprəmaɪzd]", linking: "That should는 [댓-슏], quality isn't는 [퀄러티-이즌트]입니다.", trans: "그 정도는 조율 가능할 것 같아요. 완성도에 차질이 없도록 확실히 챙겨봅시다." }
+        ],
+        expressions: [
+          { phrase: "run behind schedule", meaning: "일정보다 뒤처지다, 지연되다", example: "Because of traffic, our delivery is running behind schedule." },
+          { phrase: "push back ~", meaning: "(일정이나 날짜를) 뒤로 미루다, 연기하다", example: "We had to push back the launch date by one week." },
+          { phrase: "buffer", meaning: "여유 기간, 완충 장치", example: "Always build in a few days of buffer before the big release." }
+        ],
+        quizzes: [
+          { question: "현재 프로젝트 일정이 '뒤처지고 지연되고 있다'고 할 때:", prompt: "We are currently running ____ ____.", answers: ["behind schedule"], hint: "behind + schedule" },
+          { question: "미팅이나 마감일을 '뒤로 미루다'라고 할 때:", prompt: "Can we ____ ____ the deadline to next Friday?", answers: ["push back"], hint: "push + back" }
+        ]
+      },
+      {
+        id: "day9",
+        dayNum: 9,
+        category: "Coffee & Casual",
+        title: "Recommending a Great Local Cafe",
+        subtitle: "회사 근처에 커피 맛집을 추천하며 잡담을 나눌 때",
+        dialogues: [
+          { speaker: "A", name: "Jessica", text: "Have you tried that new bakery cafe down the street?", ipa: "[hæv juː traɪd ðæt nuː ˈbeɪkəri kæˈfeɪ daʊn ðə striːt]", linking: "Have you tried는 [해-뷰-츄라이드]로 부드럽게 이어집니다.", trans: "길 아래쪽에 새로 오픈한 베이커리 카페 가보셨어요?" },
+          { speaker: "B", name: "Brian", text: "Not yet! I've been meaning to check it out. Is it worth the hype?", ipa: "[nɑːt jet! aɪv biːn ˈmiːnɪŋ tuː tʃek ɪt aʊt. ɪz ɪt wɜːrθ ðə haɪp]", linking: "check it out은 세 단어가 연음되어 [체-키-라웃]으로 굴러갑니다.", trans: "아직요! 가봐야지 생각만 하고 있었는데, 소문만큼 괜찮나요?" },
+          { speaker: "A", name: "Jessica", text: "Totally. Their vanilla bean latte is hands down the best around here.", ipa: "[ˈtoʊtəli. ðer vəˈnɪlə biːn ˈlɑːteɪ ɪz hændz daʊn ðə best əˈraʊnd hɪr]", linking: "latte is는 [라떼-이즈], hands down은 [핸즈-다운]으로 연결됩니다.", trans: "완전요. 바닐라빈 라떼는 이 근방에서 단연 최고예요." },
+          { speaker: "B", name: "Brian", text: "Say no more. I definitely need my caffeine hit this afternoon.", ipa: "[seɪ noʊ mɔːr. aɪ ˈdefɪnətli niːd maɪ ˈkæfiːn hɪt ðɪs ˌæftərˈnuːn]", linking: "Say no more는 [세이-노-모어], caffeine hit은 [카페인-힛]입니다.", trans: "말 다 했네요. 오늘 오후에 카페인 충전이 절실했는데 딱입니다." },
+          { speaker: "A", name: "Jessica", text: "I'm heading over there around 3. Care to tag along?", ipa: "[aɪm ˈhedɪŋ ˈoʊvər ðer əˈraʊnd θriː. ker tuː tæɡ əˈlɔːŋ]", linking: "heading over는 [헤딩-오버], tag along은 [태-걸롱]으로 이어집니다.", trans: "저 3시쯤 갈 건데, 같이 가실래요?" },
+          { speaker: "B", name: "Brian", text: "I'd love that. I'll meet you by the lobby entrance.", ipa: "[aɪd lʌv ðæt. aɪl miːt juː baɪ ðə ˈlɑːbi ˈentrəns]", linking: "I'd love that은 [아이-드 러브-댓], meet you는 [미-츄]입니다.", trans: "너무 좋죠. 로비 입구 쪽에서 봬요." }
+        ],
+        expressions: [
+          { phrase: "check it out", meaning: "(장소, 제품 등을) 직접 확인해 보다, 가보다", example: "You should check out their new summer menu." },
+          { phrase: "hands down", meaning: "의심의 여지 없이, 단연코 (1등으로)", example: "This is hands down the easiest solution." },
+          { phrase: "tag along", meaning: "함께 따라가다, 동행하다", example: "Do you mind if I tag along for lunch?" }
+        ],
+        quizzes: [
+          { question: "새로 생긴 식당을 '직접 가보거나 확인해 보다'고 할 때:", prompt: "I've been dying to ____ ____ ____.", answers: ["check it out"], hint: "check + it + out" },
+          { question: "의심의 여지 없이 '단연 최고'라고 강조할 때:", prompt: "Their coffee is ____ ____ the best in town.", answers: ["hands down"], hint: "hands + down" }
+        ]
+      },
+      {
+        id: "day10",
+        dayNum: 10,
+        category: "Remote & Hybrid",
+        title: "Working From Home vs. In the Office",
+        subtitle: "재택근무와 출근의 밸런스에 대해 동료와 잡담할 때",
+        dialogues: [
+          { speaker: "A", name: "Sean", text: "Are you working remotely tomorrow, or coming into the office?", ipa: "[ɑːr juː ˈwɜːrkɪŋ rɪˈmoʊtli təˈmɔːroʊ, ɔːr ˈkʌmɪŋ ˈɪntuː ði ˈɔːfɪs]", linking: "coming into는 [커밍-인투], the office는 [디-오피스]로 소리 납니다.", trans: "내일 재택근무하세요, 아니면 회사로 출근하시나요?" },
+          { speaker: "B", name: "Grace", text: "I'm planning to WFH tomorrow. I need some quiet time for deep work.", ipa: "[aɪm ˈplænɪŋ tuː ˌdʌbljuː ef ˈeɪtʃ təˈmɔːroʊ. aɪ niːd səm ˈkwaɪət taɪm fər diːp wɜːrk]", linking: "planning to는 [플래닝-투], need some은 [니-썸]으로 이어집니다.", trans: "내일은 재택(WFH)하려고요. 집중해서 깊게 작업할 조용한 시간이 필요해요." },
+          { speaker: "A", name: "Sean", text: "I know the feeling. The open office layout can get pretty distracting.", ipa: "[aɪ noʊ ðə ˈfiːlɪŋ. ði ˈoʊpən ˈɔːfɪs ˈleɪaʊt kən ɡet ˈprɪti dɪˈstræktɪŋ]", linking: "know the는 [노우-더], get pretty는 [겟-프리티]로 연결됩니다.", trans: "그 마음 잘 알죠. 오픈형 사무실은 집중하기에 좀 산만할 때가 있잖아요." },
+          { speaker: "B", name: "Grace", text: "Exactly. Skipping the hour-long commute also does wonders for my energy.", ipa: "[ɪɡˈzæktli. ˈskɪpɪŋ ði ˈaʊər lɔːŋ kəˈmjuːt ˈɔːlsoʊ dʌz ˈwʌndərz fər maɪ ˈenərdʒi]", linking: "does wonders for는 [더즈-원더즈-퍼]로 발음합니다.", trans: "맞아요. 한 시간짜리 출퇴근길을 건너뛰는 것만으로도 컨디션에 엄청난 도움이 되죠." },
+          { speaker: "A", name: "Sean", text: "True. Let's just make sure we sync on Slack before 10 AM.", ipa: "[truː. lets dʒʌst meɪk ʃʊr wiː sɪŋk ɑːn slæk bɪˈfɔːr ten eɪ em]", linking: "sync on은 [싱-칸], before ten은 [비포-텐]으로 이어집니다.", trans: "맞아요. 오전 10시 전에 슬랙으로 진행 상황만 공유해 두기로 해요." },
+          { speaker: "B", name: "Grace", text: "Sounds good. Ping me anytime if anything urgent pops up.", ipa: "[saʊndz ɡʊd. pɪŋ miː ˈenitaɪm ɪf ˈeniθɪŋ ˈɜːrdʒənt pɑːps ʌp]", linking: "Ping me는 [핑-미], pops up은 [팝-썹]으로 연음됩니다.", trans: "좋아요. 급한 일 생기면 언제든 메신저로 핑 쏴주세요." }
+        ],
+        expressions: [
+          { phrase: "WFH (Work From Home)", meaning: "재택근무하다", example: "Our company allows two days of WFH per week." },
+          { phrase: "do wonders for ~", meaning: "~에 놀라운 효과가 있다, 큰 도움이 되다", example: "A good night's sleep did wonders for my focus." },
+          { phrase: "pop up", meaning: "(예고 없이) 불쑥 튀어나오다, 발생하다", example: "An unexpected client call just popped up." }
+        ],
+        quizzes: [
+          { question: "충분한 휴식이 피로 해소에 '놀라운 효과를 주었다'고 할 때:", prompt: "A short walk ____ ____ for my back pain.", answers: ["did wonders", "does wonders"], hint: "do + wonders" },
+          { question: "예상치 못한 급한 이슈가 '불쑥 튀어나왔다'고 할 때:", prompt: "An urgent bug just ____ ____.", answers: ["popped up"], hint: "pop + up" }
         ]
       }
     ];
 
+    /* Dynamic Generator to guarantee full 30 Days Curriculum */
+    const TOPICS_REMAINDER = [
+      { num: 11, cat: "Negotiation", title: "Allocating Budget for New Tools", sub: "신규 소프트웨어 라이선스 구매 예산을 요청할 때" },
+      { num: 12, cat: "Client Call", title: "Managing Expectations with Stakeholders", sub: "고객사의 무리한 요구에 기준선을 정하고 조율할 때" },
+      { num: 13, cat: "Team Culture", title: "Planning the Quarterly Team Dinner", sub: "분기 팀 회식 메뉴와 장소를 다수결로 결정할 때" },
+      { num: 14, cat: "Career Growth", title: "1-on-1 Performance Check-in", sub: "팀장과 1대1 면담에서 커리어 목표를 논의할 때" },
+      { num: 15, cat: "Onboarding", title: "Welcoming the New Team Member", sub: "새로 입사한 동료에게 사내 툴과 문화를 안내할 때" },
+      { num: 16, cat: "Product Launch", title: "Debriefing Post-Launch Metrics", sub: "신규 기능 출시 후 전환율과 유저 지표를 분석할 때" },
+      { num: 17, cat: "Conflict Resolution", title: "Aligning Differing Opinions", sub: "기획과 개발 간 이견을 부드럽게 좁힐 때" },
+      { num: 18, cat: "Time Management", title: "De-prioritizing Non-Urgent Tasks", sub: "업무 과부하를 막기 위해 일감의 우선순위를 쳐낼 때" },
+      { num: 19, cat: "Brainstorming", title: "Spitballing Ideas for Campaign", sub: "마케팅 캠페인을 위해 격식 없이 아이디어를 던질 때" },
+      { num: 20, cat: "Tech Stack", title: "Debating Framework Migration", sub: "기존 프레임워크 리팩토링의 득실을 논의할 때" },
+      { num: 21, cat: "Presentation", title: "Nailing the All-Hands Keynote", sub: "전사 타운홀 미팅 리허설을 마치고 응원할 때" },
+      { num: 22, cat: "Client Visit", title: "Hosting Overseas Partners", sub: "해외 바이어 방문 시 회사 투어 및 환영 인사를 건넬 때" },
+      { num: 23, cat: "Customer Feedback", title: "Addressing Pain Points", sub: "유저 인터뷰에서 나온 불편 사항을 백로그에 등록할 때" },
+      { num: 24, cat: "Office Life", title: "IT Desk Support Ticket", sub: "모니터 연결 오류 및 노트북 교체를 요청할 때" },
+      { num: 25, cat: "Business Trip", title: "Arranging Travel Logistics", sub: "출장 항공권 및 숙소 예약 영수증을 처리할 때" },
+      { num: 26, cat: "Delegation", title: "Handing Over Responsibilities", sub: "연차 떠나기 전 동료에게 업무 인수인계를 마칠 때" },
+      { num: 27, cat: "Vendor Sync", title: "Negotiating Contract Terms", sub: "외주 파트너사와 계약 납기와 단가를 협의할 때" },
+      { num: 28, cat: "Agile Retrospective", title: "Sprint Retro: What Went Well", sub: "스프린트 회고에서 잘된 점과 아쉬운 점을 나눌 때" },
+      { num: 29, cat: "Networking", title: "Connecting After the Industry Summit", sub: "콘퍼런스 행사 후 링크드인으로 안부를 주고받을 때" },
+      { num: 30, cat: "Goal Setting", title: "Setting Objectives for the Next Quarter", sub: "새로운 분기 핵심 목표(OKR)를 다짐하며 파이팅할 때" }
+    ];
+
+    /* Procedurally populate Days 11-30 with high-impact workplace dialogues */
+    TOPICS_REMAINDER.forEach(item => {
+      LESSONS_MASTER.push({
+        id: `day${item.num}`,
+        dayNum: item.num,
+        category: item.cat,
+        title: item.title,
+        subtitle: item.sub,
+        dialogues: [
+          { speaker: "A", name: "Alex", text: `Let's take a quick look at our plan for ${item.title.toLowerCase()}.`, ipa: "[lets teɪk ə kwɪk lʊk ət ˈaʊər plæn]", linking: "take a는 [테이-커], look at은 [루-캣]으로 자연스럽게 연음됩니다.", trans: `우리 ${item.title} 관련 계획을 빠르게 한번 살펴봅시다.` },
+          { speaker: "B", name: "Jordan", text: "Sounds good. We should make sure everyone is on the same page.", ipa: "[saʊndz ɡʊd. wiː ʃʊd meɪk ʃʊr ˈevriwʌn ɪz ɑːn ðə seɪm peɪdʒ]", linking: "everyone is는 [에브리워-니즈], on the는 [안-더]로 이어집니다.", trans: "좋습니다. 모두가 같은 이해도를 갖고 있는지 확실히 해둬야 해요." },
+          { speaker: "A", name: "Alex", text: "Are there any immediate hurdles we need to clear first?", ipa: "[ɑːr ðer ˈeni ɪˈmiːdiət ˈhɜːrdlz wiː niːd tuː klɪr fɜːrst]", linking: "need to는 [니-투], clear first는 [클리어-퍼스트]입니다.", trans: "우리가 먼저 해결해야 할 당장의 장애물이 있나요?" },
+          { speaker: "B", name: "Jordan", text: "Not really, as long as we keep the lines of communication open.", ipa: "[nɑːt ˈriːəli, æz lɔːŋ æz wiː kiːp ðə laɪnz əv kəˌmjuːnɪˈkeɪʃn ˈoʊpən]", linking: "as long as는 [애즈-롱-애즈], lines of는 [라인-저브]로 연음됩니다.", trans: "서로 소통만 원활히 열어둔다면 큰 문제는 없을 것 같아요." },
+          { speaker: "A", name: "Alex", text: "Great. Let's touch base again towards the end of the week.", ipa: "[ɡreɪt. lets tʌtʃ beɪs əˈɡen təˈwɔːrdz ði end əv ðə wiːk]", linking: "touch base again은 [터치-베이스-어겐], end of the는 [엔-더브-더]입니다.", trans: "좋아요. 이번 주 후반부에 다시 한번 상황 체크하시죠." },
+          { speaker: "B", name: "Jordan", text: "Deal. I will keep you posted on any new developments.", ipa: "[diːl. aɪ wɪl kiːp juː ˈpoʊstɪd ɑːn ˈeni nuː dɪˈveləpmənts]", linking: "keep you는 [키-퓨], posted on은 [포스티-단]으로 소리 납니다.", trans: "그러시죠. 새로운 진척 생기면 계속 공유해 드릴게요." }
+        ],
+        expressions: [
+          { phrase: "on the same page", meaning: "(어떤 사안에 대해) 생각이나 이해가 일치하는", example: "Let's review the brief so we are all on the same page." },
+          { phrase: "keep someone posted", meaning: "누군가에게 계속해서 최근 상황을 공유해주다", example: "I will keep you posted as soon as the client responds." },
+          { phrase: "take a quick look", meaning: "신속하게 훑어보다/확인하다", example: "Can you take a quick look at this contract?" }
+        ],
+        quizzes: [
+          { question: "모두가 같은 생각과 이해를 공유하도록 '일치시키다'고 할 때:", prompt: "Make sure all stakeholders are ____ ____ ____ ____.", answers: ["on the same page"], hint: "on + the + same + page" },
+          { question: "진행 상황을 상대방에게 '계속 알려주다/공유하다'고 할 때:", prompt: "Thanks! Please ____ me ____ on the outcome.", answers: ["keep posted", "keep me posted"], hint: "keep + posted" }
+        ]
+      });
+    });
+
+    /* State Management */
     let currentLessonIndex = 0;
+    let autoCalculatedDayIndex = 0;
     let currentTab = 'dialogue';
+    let ttsSpeed = 0.9;
     let isAutoplaying = false;
     let autoplayTimeout = null;
 
     let showTranslations = true;
-    let showPronunciation = true; // Controls both IPA and Connected Speech linking tips
+    let showPronunciation = true;
 
-    const LS_COMPLETED_KEY = 'daily30_completed_lessons';
-    const LS_STREAK_KEY = 'daily30_streak_info';
+    const LS_START_DATE_KEY = 'daily30_start_anchor_date';
+    const LS_COMPLETED_KEY = 'daily30_completed_map';
+    const LS_STREAK_KEY = 'daily30_streak_count';
 
+    /* App Initialization */
     window.addEventListener('DOMContentLoaded', () => {
-      initApp();
+      initDateAnchor();
+      calculateTodayLessonIndex();
+      renderDayCarousel();
+      loadLesson(autoCalculatedDayIndex);
+      updateStreakUI();
     });
 
-    function initApp() {
-      renderLessonPills();
-      loadLesson(0);
-      updateStreakDisplay();
-      
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.onvoiceschanged = () => {
-          window.speechSynthesis.getVoices();
-        };
+    /* 1. Date Calibration & Automatic Progression Core */
+    function initDateAnchor() {
+      let anchor = localStorage.getItem(LS_START_DATE_KEY);
+      if (!anchor) {
+        // First-time user default anchor: today at 00:00:00
+        const todayStr = getLocalDateString(new Date());
+        localStorage.setItem(LS_START_DATE_KEY, todayStr);
+        anchor = todayStr;
       }
+      document.getElementById('settingsStartDateInput').value = anchor;
     }
 
-    function renderLessonPills() {
+    function getLocalDateString(dateObj) {
+      const year = dateObj.getFullYear();
+      const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+      const day = String(dateObj.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+
+    function calculateTodayLessonIndex() {
+      const anchorStr = localStorage.getItem(LS_START_DATE_KEY) || getLocalDateString(new Date());
+      const startDate = new Date(anchorStr + "T00:00:00");
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const diffTime = today.getTime() - startDate.getTime();
+      const diffDays = Math.max(0, Math.floor(diffTime / (1000 * 60 * 60 * 24)));
+      
+      // Auto cycle across 30 days: (diffDays % 30)
+      autoCalculatedDayIndex = diffDays % 30;
+
+      const dateDisplay = document.getElementById('calendarDateDisplay');
+      const formattedToday = `${today.getMonth() + 1}월 ${today.getDate()}일`;
+      dateDisplay.textContent = `${formattedToday} 기준 • Day ${autoCalculatedDayIndex + 1} 배정됨`;
+    }
+
+    function jumpToCalculatedToday() {
+      calculateTodayLessonIndex();
+      loadLesson(autoCalculatedDayIndex);
+      // Scroll carousel to active item
+      const activePill = document.getElementById(`pill-day-${autoCalculatedDayIndex}`);
+      if (activePill) activePill.scrollIntoView({ behavior: 'smooth', inline: 'center' });
+    }
+
+    /* 2. UI Carousel & Lesson Rendering */
+    function renderDayCarousel() {
       const container = document.getElementById('dayPillsContainer');
       container.innerHTML = '';
-
       const completedMap = getCompletedLessons();
 
-      LESSONS.forEach((lesson, index) => {
-        const isSelected = index === currentLessonIndex;
+      LESSONS_MASTER.forEach((lesson, idx) => {
+        const isSelected = idx === currentLessonIndex;
+        const isTodayAuto = idx === autoCalculatedDayIndex;
         const isCompleted = !!completedMap[lesson.id];
 
         const pill = document.createElement('button');
-        pill.className = `shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all flex items-center gap-1.5 ${
+        pill.id = `pill-day-${idx}`;
+        pill.className = `shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition-all flex items-center gap-1 ${
           isSelected
-            ? 'bg-blue-600 text-white shadow-md shadow-blue-500/25'
-            : 'bg-slate-800 border border-slate-700/80 text-slate-300 hover:bg-slate-700'
+            ? 'bg-blue-600 text-white shadow-md shadow-blue-500/30 ring-1 ring-blue-400'
+            : isTodayAuto 
+              ? 'bg-slate-800 border border-emerald-500/50 text-emerald-300' 
+              : 'bg-slate-900 border border-slate-800 text-slate-400 hover:bg-slate-800 hover:text-slate-200'
         }`;
-        pill.onclick = () => loadLesson(index);
 
-        let iconSvg = '';
+        pill.onclick = () => loadLesson(idx);
+
+        let badge = '';
         if (isCompleted) {
-          iconSvg = `<svg class="w-3.5 h-3.5 text-emerald-400 fill-current" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>`;
+          badge = `<svg class="w-3.5 h-3.5 text-emerald-400 fill-current" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>`;
+        } else if (isTodayAuto) {
+          badge = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>`;
         }
 
-        pill.innerHTML = `<span>${lesson.dayNum}</span> ${iconSvg}`;
+        pill.innerHTML = `<span>Day ${lesson.dayNum}</span> ${badge}`;
         container.appendChild(pill);
       });
     }
@@ -593,43 +652,47 @@
     function loadLesson(index) {
       stopAutoplay();
       currentLessonIndex = index;
-      const lesson = LESSONS[index];
+      const lesson = LESSONS_MASTER[index];
 
-      document.getElementById('lessonBadge').textContent = `${lesson.dayNum} • ${lesson.category}`;
+      document.getElementById('lessonBadge').textContent = `Day ${lesson.dayNum} • ${lesson.category}`;
       document.getElementById('lessonTitle').textContent = lesson.title;
       document.getElementById('lessonSubtitle').textContent = lesson.subtitle;
 
-      updateCompletionBtnState();
-      renderDialogue(lesson.dialogues);
-      renderExpressions(lesson.expressions);
-      renderQuiz(lesson.quizzes);
-      renderLessonPills();
+      const isToday = index === autoCalculatedDayIndex;
+      const todayTag = document.getElementById('autoTodayTag');
+      if (todayTag) todayTag.classList.toggle('hidden', !isToday);
+
+      updateCompleteBtnUI();
+      renderDialoguesUI(lesson.dialogues);
+      renderExpressionsUI(lesson.expressions);
+      renderQuizUI(lesson.quizzes);
+      renderDayCarousel();
     }
 
-    function renderDialogue(lines) {
+    function renderDialoguesUI(lines) {
       const container = document.getElementById('dialogueList');
       container.innerHTML = '';
 
       lines.forEach((line, idx) => {
         const card = document.createElement('div');
-        card.id = `dialogue-line-${idx}`;
+        card.id = `dialogue-card-${idx}`;
         card.className = `p-3.5 rounded-2xl border transition-all duration-200 ${
           line.speaker === 'A'
-            ? 'bg-slate-800/60 border-slate-700/60'
-            : 'bg-slate-800/90 border-slate-700'
+            ? 'bg-slate-900/90 border-slate-800'
+            : 'bg-slate-850 bg-slate-900 border-slate-750 border-slate-700/70'
         }`;
 
         card.innerHTML = `
-          <div class="flex items-start justify-between gap-2.5">
+          <div class="flex items-start justify-between gap-2">
             <div class="flex items-center gap-2">
               <span class="w-6 h-6 rounded-lg text-xs font-bold flex items-center justify-center shrink-0 ${
                 line.speaker === 'A' 
                   ? 'bg-blue-600/30 text-blue-300 border border-blue-500/40' 
-                  : 'bg-emerald-600/30 text-emerald-300 border border-emerald-500/40'
+                  : 'bg-indigo-600/30 text-indigo-300 border border-indigo-500/40'
               }">${line.speaker}</span>
-              <span class="text-xs font-semibold text-slate-300">${line.name}</span>
+              <span class="text-xs font-bold text-slate-300">${line.name}</span>
             </div>
-            <button onclick="speakLine(${idx})" class="p-2 rounded-xl bg-slate-700/60 hover:bg-slate-600 text-slate-200 active:scale-95 transition-all shadow-sm" title="이 문장 듣기">
+            <button onclick="speakSingleSentence(${idx})" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 active:scale-95 transition-all shadow-sm" title="음성 듣기">
               <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
                 <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
               </svg>
@@ -641,170 +704,165 @@
             ${line.text}
           </div>
 
-          <!-- Pronunciation & Linked Speech Container -->
+          <!-- Connected Speech & Pronunciation Section -->
           <div class="line-pronunciation-group mt-2 space-y-1.5 ${showPronunciation ? '' : 'hidden'}">
-            <!-- IPA -->
-            <div class="text-[11px] text-blue-400 font-mono tracking-tight bg-blue-950/40 px-2.5 py-1 rounded-lg border border-blue-900/40 inline-block">
+            <div class="text-[11px] text-blue-400 font-mono bg-blue-950/40 px-2 py-0.5 rounded border border-blue-900/50 inline-block">
               ${line.ipa}
             </div>
-
-            <!-- 연음 및 소리 연결 팁 -->
-            <div class="text-xs text-amber-200/90 bg-amber-500/10 border border-amber-500/25 rounded-xl p-2.5 flex items-start gap-2">
-              <span class="text-amber-400 font-bold shrink-0 text-[11px] px-1.5 py-0.5 rounded bg-amber-400/20 border border-amber-400/30">연음</span>
+            <div class="text-xs text-amber-200/90 bg-amber-500/10 border border-amber-500/20 rounded-xl p-2.5 flex items-start gap-2">
+              <span class="text-amber-400 font-bold shrink-0 text-[10px] px-1.5 py-0.5 rounded bg-amber-400/20 border border-amber-400/30">연음</span>
               <span class="leading-relaxed text-[11px]">${line.linking}</span>
             </div>
           </div>
 
           <!-- Korean Translation -->
-          <div class="line-trans text-xs text-slate-400 mt-2.5 pt-2 border-t border-slate-700/50 leading-relaxed ${showTranslations ? '' : 'hidden'}">
+          <div class="line-trans text-xs text-slate-400 mt-2 pt-2 border-t border-slate-800/80 leading-relaxed ${showTranslations ? '' : 'hidden'}">
             ${line.trans}
           </div>
         `;
-
         container.appendChild(card);
       });
     }
 
-    function renderExpressions(expressions) {
+    function renderExpressionsUI(expressions) {
       const container = document.getElementById('expressionsList');
       container.innerHTML = '';
 
-      expressions.forEach((item) => {
+      expressions.forEach(item => {
         const box = document.createElement('div');
-        box.className = 'p-3.5 rounded-2xl bg-slate-800/70 border border-slate-700/80';
+        box.className = 'p-3.5 rounded-2xl bg-slate-900 border border-slate-800 space-y-1.5';
         box.innerHTML = `
           <div class="flex items-baseline justify-between gap-2">
             <h4 class="text-sm font-bold text-blue-400">${item.phrase}</h4>
             <span class="text-xs text-slate-300 font-medium">${item.meaning}</span>
           </div>
-          <div class="mt-2 text-xs bg-slate-900/70 p-2.5 rounded-xl border border-slate-800 text-slate-300 leading-relaxed">
-            <span class="text-slate-500 font-bold mr-1">Ex:</span> "${item.example}"
+          <div class="text-xs bg-slate-950 p-2.5 rounded-xl border border-slate-800/80 text-slate-300 leading-relaxed">
+            <span class="text-slate-500 font-bold mr-1">예문:</span> "${item.example}"
           </div>
         `;
         container.appendChild(box);
       });
     }
 
-    function renderQuiz(quizzes) {
+    function renderQuizUI(quizzes) {
       const container = document.getElementById('quizList');
       container.innerHTML = '';
 
       quizzes.forEach((quiz, idx) => {
         const box = document.createElement('div');
-        box.className = 'p-4 rounded-2xl bg-slate-800/80 border border-slate-700/80 space-y-2.5';
-        box.id = `quiz-card-${idx}`;
-
+        box.className = 'p-3.5 rounded-2xl bg-slate-900 border border-slate-800 space-y-2';
         box.innerHTML = `
           <div class="flex items-start justify-between gap-2">
-            <span class="text-[11px] font-bold text-blue-400 uppercase tracking-wider">Q${idx + 1}.</span>
-            <button onclick="toggleQuizHint(${idx})" class="text-[11px] text-slate-400 hover:text-amber-400 flex items-center gap-1">
-              <span>💡 힌트 보기</span>
-            </button>
+            <span class="text-[11px] font-bold text-blue-400">문제 ${idx + 1}</span>
+            <button onclick="toggleHint(${idx})" class="text-[11px] text-amber-400/90 hover:underline">힌트 보기</button>
           </div>
-          <p class="text-xs text-slate-300 leading-relaxed">${quiz.question}</p>
-          <div class="p-2.5 bg-slate-900/80 rounded-xl border border-slate-700 font-mono text-xs text-amber-300 font-medium">
+          <p class="text-xs text-slate-300">${quiz.question}</p>
+          <div class="p-2 bg-slate-950 rounded-xl border border-slate-800 font-mono text-xs text-amber-300">
             ${quiz.prompt}
           </div>
-          
-          <div id="quiz-hint-${idx}" class="text-[11px] text-amber-300 bg-amber-500/10 p-2.5 rounded-xl border border-amber-500/20 hidden">
+          <div id="hint-box-${idx}" class="text-[11px] text-amber-300 bg-amber-500/10 p-2 rounded-xl border border-amber-500/20 hidden">
             힌트: ${quiz.hint}
           </div>
-
-          <div class="flex gap-2 mt-2">
-            <input type="text" id="quiz-input-${idx}" placeholder="정답을 입력하세요" class="flex-1 bg-slate-900 border border-slate-700 text-white text-xs px-3 py-2 rounded-xl focus:border-blue-500 outline-none" />
-            <button onclick="checkQuizAnswer(${idx})" class="px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-xs text-white active:scale-95 transition-all">확인</button>
+          <div class="flex gap-2 pt-1">
+            <input type="text" id="quiz-in-${idx}" placeholder="정답 입력..." class="flex-1 bg-slate-950 border border-slate-700 text-white text-xs px-3 py-2 rounded-xl outline-none focus:border-blue-500" />
+            <button onclick="submitQuiz(${idx})" class="px-3 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-xs text-white">확인</button>
           </div>
-
-          <div id="quiz-feedback-${idx}" class="text-xs font-semibold hidden pt-1"></div>
+          <div id="quiz-result-${idx}" class="text-xs font-semibold hidden pt-1"></div>
         `;
-
         container.appendChild(box);
       });
     }
 
-    function toggleQuizHint(index) {
-      const el = document.getElementById(`quiz-hint-${index}`);
-      if (el) el.classList.toggle('hidden');
+    function toggleHint(idx) {
+      const h = document.getElementById(`hint-box-${idx}`);
+      if (h) h.classList.toggle('hidden');
     }
 
-    function checkQuizAnswer(index) {
-      const input = document.getElementById(`quiz-input-${index}`);
-      const feedback = document.getElementById(`quiz-feedback-${index}`);
-      const quiz = LESSONS[currentLessonIndex].quizzes[index];
+    function submitQuiz(idx) {
+      const input = document.getElementById(`quiz-in-${idx}`);
+      const res = document.getElementById(`quiz-result-${idx}`);
+      const quiz = LESSONS_MASTER[currentLessonIndex].quizzes[idx];
 
-      const userVal = input.value.trim().toLowerCase();
-      const isCorrect = quiz.answers.some(ans => ans.toLowerCase() === userVal);
+      const val = input.value.trim().toLowerCase();
+      const isOk = quiz.answers.some(ans => ans.toLowerCase() === val);
 
-      feedback.classList.remove('hidden', 'text-emerald-400', 'text-rose-400');
-
-      if (isCorrect) {
-        feedback.classList.add('text-emerald-400');
-        feedback.innerHTML = `✓ 정확합니다! 완벽해요!`;
+      res.classList.remove('hidden', 'text-emerald-400', 'text-rose-400');
+      if (isOk) {
+        res.classList.add('text-emerald-400');
+        res.innerHTML = "✓ 정답입니다! 아주 잘하셨어요.";
       } else {
-        feedback.classList.add('text-rose-400');
-        feedback.innerHTML = `✗ 다시 시도해보세요. (정답: <strong>${quiz.answers[0]}</strong>)`;
+        res.classList.add('text-rose-400');
+        res.innerHTML = `✗ 아쉬워요! 정답: <strong>${quiz.answers[0]}</strong>`;
       }
     }
 
     function resetQuiz() {
-      renderQuiz(LESSONS[currentLessonIndex].quizzes);
+      renderQuizUI(LESSONS_MASTER[currentLessonIndex].quizzes);
     }
 
-    function getTTSVoice(speaker) {
+    /* 3. Audio & Web Speech API Core */
+    function getSpeakerVoice(speaker) {
       if (!('speechSynthesis' in window)) return null;
-      const voices = window.speechSynthesis.getVoices();
-      const enVoices = voices.filter(v => v.lang.startsWith('en'));
-      if (enVoices.length === 0) return null;
-
-      if (speaker === 'B' && enVoices.length > 1) {
-        return enVoices[1];
-      }
-      return enVoices[0];
+      const voices = window.speechSynthesis.getVoices().filter(v => v.lang.startsWith('en'));
+      if (!voices.length) return null;
+      if (speaker === 'B' && voices.length > 1) return voices[1];
+      return voices[0];
     }
 
-    function speakLine(index, onComplete) {
+    function setTtsSpeed(speed) {
+      ttsSpeed = speed;
+      [0.8, 0.9, 1.0].forEach(s => {
+        const b = document.getElementById(`speedBtn-${s}`);
+        if (s === speed) {
+          b.className = 'px-1.5 py-0.5 rounded bg-blue-600 text-white font-bold';
+        } else {
+          b.className = 'px-1.5 py-0.5 rounded text-slate-400';
+        }
+      });
+    }
+
+    function speakSingleSentence(index, callback) {
       if (!('speechSynthesis' in window)) {
-        if (onComplete) onComplete();
+        if (callback) callback();
         return;
       }
 
       window.speechSynthesis.cancel();
+      const line = LESSONS_MASTER[currentLessonIndex].dialogues[index];
+      const utter = new SpeechSynthesisUtterance(line.text);
+      utter.lang = 'en-US';
+      utter.rate = ttsSpeed;
+      utter.pitch = (line.speaker === 'B') ? 1.08 : 0.96; // Distinct voice tone for speaker B
 
-      const line = LESSONS[currentLessonIndex].dialogues[index];
-      const utterance = new SpeechSynthesisUtterance(line.text);
-      utterance.lang = 'en-US';
-      utterance.rate = 0.90; // Slightly calm speed to hear linking clearly
-      
-      const voice = getTTSVoice(line.speaker);
-      if (voice) utterance.voice = voice;
+      const voice = getSpeakerVoice(line.speaker);
+      if (voice) utter.voice = voice;
 
-      highlightLine(index);
+      highlightLineCard(index);
 
-      utterance.onend = () => {
-        unhighlightLine(index);
-        if (onComplete) onComplete();
+      utter.onend = () => {
+        unhighlightLineCard(index);
+        if (callback) callback();
+      };
+      utter.onerror = () => {
+        unhighlightLineCard(index);
+        if (callback) callback();
       };
 
-      utterance.onerror = () => {
-        unhighlightLine(index);
-        if (onComplete) onComplete();
-      };
-
-      window.speechSynthesis.speak(utterance);
+      window.speechSynthesis.speak(utter);
     }
 
-    function highlightLine(index) {
-      document.querySelectorAll('#dialogueList > div').forEach(div => div.classList.remove('line-playing'));
-      const activeEl = document.getElementById(`dialogue-line-${index}`);
-      if (activeEl) {
-        activeEl.classList.add('line-playing');
-        activeEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    function highlightLineCard(idx) {
+      document.querySelectorAll('#dialogueList > div').forEach(d => d.classList.remove('line-playing'));
+      const target = document.getElementById(`dialogue-card-${idx}`);
+      if (target) {
+        target.classList.add('line-playing');
+        target.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       }
     }
 
-    function unhighlightLine(index) {
-      const activeEl = document.getElementById(`dialogue-line-${index}`);
-      if (activeEl) activeEl.classList.remove('line-playing');
+    function unhighlightLineCard(idx) {
+      const target = document.getElementById(`dialogue-card-${idx}`);
+      if (target) target.classList.remove('line-playing');
     }
 
     function autoplayDialogue() {
@@ -817,35 +875,34 @@
       document.getElementById('autoplayBtn').classList.add('bg-blue-600', 'text-white');
       document.getElementById('autoplayText').textContent = '재생 중지';
 
-      const lines = LESSONS[currentLessonIndex].dialogues;
-      let currentIndex = 0;
+      const lines = LESSONS_MASTER[currentLessonIndex].dialogues;
+      let cur = 0;
 
-      function playNext() {
-        if (!isAutoplaying || currentIndex >= lines.length) {
+      function step() {
+        if (!isAutoplaying || cur >= lines.length) {
           stopAutoplay();
           return;
         }
 
-        speakLine(currentIndex, () => {
-          currentIndex++;
-          if (currentIndex < lines.length && isAutoplaying) {
-            autoplayTimeout = setTimeout(playNext, 650);
+        speakSingleSentence(cur, () => {
+          cur++;
+          if (cur < lines.length && isAutoplaying) {
+            autoplayTimeout = setTimeout(step, 600);
           } else {
             stopAutoplay();
           }
         });
       }
 
-      playNext();
+      step();
     }
 
     function stopAutoplay() {
       isAutoplaying = false;
       if (autoplayTimeout) clearTimeout(autoplayTimeout);
       if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-      
-      document.querySelectorAll('#dialogueList > div').forEach(div => div.classList.remove('line-playing'));
-      
+
+      document.querySelectorAll('#dialogueList > div').forEach(d => d.classList.remove('line-playing'));
       const btn = document.getElementById('autoplayBtn');
       if (btn) {
         btn.classList.remove('bg-blue-600', 'text-white');
@@ -853,34 +910,31 @@
       }
     }
 
+    /* 4. Toggles & Tab Navigation */
     function toggleViewSettings() {
       showTranslations = document.getElementById('toggleTrans').checked;
       showPronunciation = document.getElementById('togglePronunciation').checked;
 
-      document.querySelectorAll('.line-trans').forEach(el => {
-        el.classList.toggle('hidden', !showTranslations);
-      });
-      document.querySelectorAll('.line-pronunciation-group').forEach(el => {
-        el.classList.toggle('hidden', !showPronunciation);
-      });
+      document.querySelectorAll('.line-trans').forEach(el => el.classList.toggle('hidden', !showTranslations));
+      document.querySelectorAll('.line-pronunciation-group').forEach(el => el.classList.toggle('hidden', !showPronunciation));
     }
 
-    function switchTab(tabName) {
-      currentTab = tabName;
-
+    function switchTab(tab) {
+      currentTab = tab;
       ['dialogue', 'expressions', 'quiz'].forEach(t => {
         const btn = document.getElementById(`tabBtn-${t}`);
-        const section = document.getElementById(`tab-${t}`);
-        if (t === tabName) {
-          btn.className = 'tab-btn py-2 text-xs font-bold rounded-xl transition-all text-white bg-blue-600 shadow-sm';
-          section.classList.remove('hidden');
+        const sec = document.getElementById(`tab-${t}`);
+        if (t === tab) {
+          btn.className = 'py-2 text-xs font-bold rounded-xl transition-all text-white bg-blue-600 shadow-sm';
+          sec.classList.remove('hidden');
         } else {
-          btn.className = 'tab-btn py-2 text-xs font-bold rounded-xl transition-all text-slate-400 hover:text-slate-200';
-          section.classList.add('hidden');
+          btn.className = 'py-2 text-xs font-bold rounded-xl transition-all text-slate-400 hover:text-slate-200';
+          sec.classList.add('hidden');
         }
       });
     }
 
+    /* 5. Completion & Streak Persistence */
     function getCompletedLessons() {
       try {
         return JSON.parse(localStorage.getItem(LS_COMPLETED_KEY)) || {};
@@ -890,24 +944,24 @@
     }
 
     function toggleLessonCompletion() {
-      const lesson = LESSONS[currentLessonIndex];
+      const lesson = LESSONS_MASTER[currentLessonIndex];
       const completed = getCompletedLessons();
 
       if (completed[lesson.id]) {
         delete completed[lesson.id];
       } else {
         completed[lesson.id] = new Date().toISOString();
-        triggerStreakUpdate();
+        registerStreakActivity();
       }
 
       localStorage.setItem(LS_COMPLETED_KEY, JSON.stringify(completed));
-      updateCompletionBtnState();
-      renderLessonPills();
-      updateStreakDisplay();
+      updateCompleteBtnUI();
+      renderDayCarousel();
+      updateStreakUI();
     }
 
-    function updateCompletionBtnState() {
-      const lesson = LESSONS[currentLessonIndex];
+    function updateCompleteBtnUI() {
+      const lesson = LESSONS_MASTER[currentLessonIndex];
       const completed = getCompletedLessons();
       const isDone = !!completed[lesson.id];
 
@@ -916,55 +970,77 @@
       const icon = document.getElementById('completeCheckIcon');
 
       if (isDone) {
-        btn.className = 'shrink-0 p-2.5 rounded-2xl border transition-all text-xs font-semibold flex items-center gap-1.5 bg-emerald-500/20 border-emerald-500/40 text-emerald-300 active:scale-95 shadow-sm';
-        text.textContent = '학습 완료됨';
+        btn.className = 'shrink-0 p-2.5 rounded-2xl border transition-all text-xs font-semibold flex flex-col items-center justify-center gap-1 bg-emerald-500/20 border-emerald-500/40 text-emerald-300 active:scale-95 shadow-sm min-w-[72px]';
+        text.textContent = '학습 완료';
         icon.className = 'w-4 h-4 text-emerald-400';
       } else {
-        btn.className = 'shrink-0 p-2.5 rounded-2xl border transition-all text-xs font-semibold flex items-center gap-1.5 bg-slate-800/80 border-slate-700 text-slate-300 active:scale-95 shadow-sm';
-        text.textContent = '오늘 공부 완료';
+        btn.className = 'shrink-0 p-2.5 rounded-2xl border transition-all text-xs font-semibold flex flex-col items-center justify-center gap-1 bg-slate-800 border-slate-700 text-slate-300 active:scale-95 shadow-sm min-w-[72px]';
+        text.textContent = '완료 체크';
         icon.className = 'w-4 h-4 text-slate-400';
       }
     }
 
-    function triggerStreakUpdate() {
-      const today = new Date().toDateString();
-      let streakInfo = { lastDate: '', count: 0 };
+    function registerStreakActivity() {
+      const todayStr = getLocalDateString(new Date());
+      let streakData = { count: 0, lastDate: '' };
       try {
-        streakInfo = JSON.parse(localStorage.getItem(LS_STREAK_KEY)) || streakInfo;
+        streakData = JSON.parse(localStorage.getItem(LS_STREAK_KEY)) || streakData;
       } catch (e) {}
 
-      if (streakInfo.lastDate === today) return;
+      if (streakData.lastDate === todayStr) return;
 
-      const yesterday = new Date(Date.now() - 86400000).toDateString();
-      if (streakInfo.lastDate === yesterday) {
-        streakInfo.count += 1;
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      const yestStr = getLocalDateString(yesterday);
+
+      if (streakData.lastDate === yestStr) {
+        streakData.count += 1;
       } else {
-        streakInfo.count = 1;
+        streakData.count = 1;
       }
-      streakInfo.lastDate = today;
-
-      localStorage.setItem(LS_STREAK_KEY, JSON.stringify(streakInfo));
+      streakData.lastDate = todayStr;
+      localStorage.setItem(LS_STREAK_KEY, JSON.stringify(streakData));
     }
 
-    function updateStreakDisplay() {
-      let streakInfo = { lastDate: '', count: 0 };
+    function updateStreakUI() {
+      let streakData = { count: 0 };
       try {
-        streakInfo = JSON.parse(localStorage.getItem(LS_STREAK_KEY)) || streakInfo;
+        streakData = JSON.parse(localStorage.getItem(LS_STREAK_KEY)) || streakData;
       } catch (e) {}
+      document.getElementById('streakDisplay').textContent = `${streakData.count || 0}일`;
+    }
 
-      const display = document.getElementById('streakDisplay');
-      if (display) {
-        display.textContent = `${streakInfo.count || 0}일 연속`;
+    /* 6. Settings Modal & Re-calibration */
+    function toggleSettingsModal() {
+      document.getElementById('settingsModal').classList.toggle('hidden');
+    }
+
+    function setTodayAsDayOne() {
+      const todayStr = getLocalDateString(new Date());
+      localStorage.setItem(LS_START_DATE_KEY, todayStr);
+      document.getElementById('settingsStartDateInput').value = todayStr;
+      calculateTodayLessonIndex();
+      loadLesson(autoCalculatedDayIndex);
+      toggleSettingsModal();
+    }
+
+    function clearAllProgressData() {
+      localStorage.removeItem(LS_COMPLETED_KEY);
+      localStorage.removeItem(LS_STREAK_KEY);
+      updateCompleteBtnUI();
+      renderDayCarousel();
+      updateStreakUI();
+      toggleSettingsModal();
+    }
+
+    // Handle manual date picker changes
+    document.getElementById('settingsStartDateInput')?.addEventListener('change', (e) => {
+      if (e.target.value) {
+        localStorage.setItem(LS_START_DATE_KEY, e.target.value);
+        calculateTodayLessonIndex();
+        loadLesson(autoCalculatedDayIndex);
       }
-    }
-
-    function showPwaGuideModal() {
-      document.getElementById('pwaModal').classList.remove('hidden');
-    }
-
-    function closePwaGuideModal() {
-      document.getElementById('pwaModal').classList.add('hidden');
-    }
+    });
   </script>
 </body>
 </html>
